@@ -16,28 +16,34 @@ let start_time = 0;
 let dbclicking = false;
 let dbclicked = false;
 let clicked = false;
+let skip_next_release = false;
 
 let prev_touch_time = 0;
 for (var i = 0; i < targets.length; i++){
     targets[i].addEventListener('click', function(){
-        clicked_item = this;
-        if (clicked == false){
-            if(just_dragged === false){
-                clicked = true;
-                setTimeout(function(){
-                    if (clicked === true){
-                        for (var j = 0; j < targets.length; j++){
-                            targets[j].style.backgroundColor = 'red';
-                        }
-                        clicked_item.style.backgroundColor = 'blue';
-                        clicked = false;
-                    }             
-                }, 250);
-                    
-            }else{
-                just_dragged = false;
+        if(skip_next_release === false){
+            clicked_item = this;
+            if (clicked == false){
+                if(just_dragged === false){
+                    clicked = true;
+                    setTimeout(function(){
+                        if (clicked === true){
+                            for (var j = 0; j < targets.length; j++){
+                                targets[j].style.backgroundColor = 'red';
+                            }
+                            clicked_item.style.backgroundColor = 'blue';
+                            clicked = false;
+                        }             
+                    }, 250);
+                        
+                }else{
+                    just_dragged = false;
+                }
             }
+        }else{
+            skip_next_release = false;
         }
+        
     })
     const drag_element = targets[i];
     targets[i].addEventListener('mousedown', function(event){
@@ -51,16 +57,21 @@ for (var i = 0; i < targets.length; i++){
         just_dragged = false;
     })
     targets[i].addEventListener('mouseup', function(){
-        if(dbclicking == false){
-            isdragging = false;
-            dragging_element = null;
-            dbclicked = false;
+        if(skip_next_release === false){
+            if(dbclicking == false){
+                isdragging = false;
+                dragging_element = null;
+                dbclicked = false;
+            }else{
+                dbclicking = false;
+                dbclicked = true;
+                isdragging = false;
+                just_dragged = true;
+            }
         }else{
-            dbclicking = false;
-            dbclicked = true;
-            isdragging = false;
-            just_dragged = true;
+            skip_next_release = false;
         }
+        
     })
     targets[i].addEventListener('dblclick', function(event){
         clicked = false;
@@ -79,29 +90,34 @@ for (var i = 0; i < targets.length; i++){
         dragging_element = drag_element;
         startpart.x = event.touches[0].clientX - drag_element.offsetLeft;
         startpart.y = event.touches[0].clientY - drag_element.offsetTop;
+        startposition.x = drag_element.offsetLeft;
+        startposition.y = drag_element.offsetTop;
         just_dragged = false;
     })
     targets[i].addEventListener('touchend', function(event){
-        if(dbclicking == false){
-            isdragging = false;
-            dragging_element = null;
-            dbclicked = false;
+        if(skip_next_release === true){
+            skip_next_release = false;
         }else{
-            dbclicking = false;
-            dbclicked = true;
-            isdragging = false;
-            just_dragged = true;
+            if(dbclicking == false){
+                isdragging = false;
+                dragging_element = null;
+                dbclicked = false;
+            }else{
+                dbclicking = false;
+                dbclicked = true;
+                isdragging = false;
+                just_dragged = true;
+            }
+            if(new Date().getTime() - prev_touch_time < 250){
+                clicked = false;
+                dbclicking = true;
+                isdragging = true;
+                dragging_element = drag_element;
+                startpart.x = event.changedTouches[0].clientX - drag_element.offsetLeft;
+                startpart.y = event.changedTouches[0].clientY - drag_element.offsetTop;
+            }
         }
-        if(new Date().getTime() - prev_touch_time < 250){
-            clicked = false;
-            dbclicking = true;
-            isdragging = true;
-            dragging_element = drag_element;
-            startpart.x = event.touches[0].clientX - drag_element.offsetLeft;
-            startpart.y = event.touches[0].clientY - drag_element.offsetTop;
-            startposition.x = drag_element.offsetLeft;
-            startposition.y = drag_element.offsetTop;
-        }
+        
         prev_touch_time = new Date().getTime();
     })
     targets[i].addEventListener('touchmove', function(event){
@@ -129,18 +145,26 @@ document.addEventListener('mousemove', function(event){
 
 })
 document.addEventListener('keydown', function(event){
-    if(event.key === "Escape" || event.key == "Esc"){
+    if((event.key === "Escape" || event.key == "Esc") && dragging_element != null){
         isdragging = false;
         dragging_element.style.left = startposition.x + 'px';
         dragging_element.style.top = startposition.y + 'px';
         dragging_element = null;
     }
+
+    just_dragged = false;
+    skip_next_release = true;
 })
 const background = document.querySelector('#workspace');
 document.getElementById("workspace").addEventListener('click', function(event){
-    if (!event.target.classList.contains('target') && just_dragged === false){
-        for (var j = 0; j < targets.length; j++){
-            targets[j].style.backgroundColor = 'red';
+    if(skip_next_release === false){
+        if (!event.target.classList.contains('target') && just_dragged === false){
+            for (var j = 0; j < targets.length; j++){
+                targets[j].style.backgroundColor = 'red';
+            }
         }
+    }else{
+        skip_next_release = false;
     }
+        
 })
