@@ -102,13 +102,14 @@ for (var i = 0; i < targets.length; i++){
                 isdragging = false;
                 dragging_element = null;
                 dbclicked = false;
+                just_dragged = false;
             }else{
                 dbclicking = false;
                 dbclicked = true;
                 isdragging = false;
                 just_dragged = true;
             }
-            if(new Date().getTime() - prev_touch_time < 250){
+            if(new Date().getTime() - prev_touch_time < 250 && prev_touch_time != 0){
                 clicked = false;
                 dbclicking = true;
                 isdragging = true;
