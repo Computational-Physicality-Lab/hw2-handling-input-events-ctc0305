@@ -1,0 +1,299 @@
+/* Your Code Here */
+/*最上面的紅線*/
+.top-margin{
+    background-color: #c51230;
+    height: 30px;
+}
+/*logo和物件*/
+.page-header img{
+    width: 80%;
+}
+.page-header{
+    float: left;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+}
+.page-header div{
+    float: right;
+    display: flex;
+    background-color: #ac2432;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+.page-header a{
+    color: white;
+    text-decoration: none;
+}
+.shopping-cart h2{
+    color: white;
+    font-size: 2rem;
+    padding-left: 5px;
+}
+.page-header h1{
+    font-family: Catamaran;
+}
+/*上方選單*/
+
+.main-nav{
+    padding-left: 5%;
+    padding-right: 5%;
+    display: flex;
+    font-size: 1.25rem;
+    padding-top: 10px;
+    margin-top: 10px;
+    list-style: none;
+    width: 90%;
+    text-align: center;
+    justify-content: center;
+    padding-bottom: 10px;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    font-family: "Open Sans";
+}
+
+.main-nav li{
+    justify-content: space-around;
+    color: #c51230;
+    text-align: center;
+    padding-left: 2%;
+    padding-right: 2%;
+
+}
+
+.main-nav a{
+    color: #c51230;
+    text-decoration: none;
+}
+.main-nav a:hover{
+    text-decoration: underline;
+    text-decoration-color: #c51230;
+    text-decoration-thickness: 3px;
+}
+/*圖片*/
+.main-img{
+    width: 100%;
+}
+
+/*內容*/
+.main-content{
+    margin-top: 30px;
+    margin-left: 5%;
+    margin-right: 5%;
+    justify-content: space-between;
+    display: flex;
+    margin-bottom: 40px;
+}
+.sub-content{
+    width: 38%;
+    border: 3px solid #c51230;
+    border-radius: 10px;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.sub-content h2{
+    font-size: 125%;
+}
+
+/*底端*/
+.wrapper{
+    width: 100%;
+    background: #c51230;
+    margin-top: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: white;   
+    font-family: "Open Sans";
+}
+.bottom-link{
+    display: flex;
+    list-style: none;
+    align-items: center;
+    justify-content: space-around;
+}
+.bottom-link li{
+    text-align: center;
+    padding-left: 3%;
+    padding-right: 3%;
+}
+.bottom-link a{
+    color: rgb(190, 190, 190);
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+.bottom-link a:hover{
+    color: white;
+}
+.bottom-link p{
+    text-align: center;
+    font-size: 0.9rem;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+/*全域變數*/
+h1{
+    color: black;
+    font-size: 3rem;
+    text-align: center;
+}
+/*not_implemented_page*/
+.not_implemented{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    opacity: 0.5;
+}
+.not_implemented_message{
+    color: gray;
+    text-align: center;
+    font-size: 1.5rem;
+}
+/*Products*/
+#Our-T-shirts{
+    margin-left: 5%;
+    font-size: 2.5rem;
+}
+.wrapper-grid{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    padding-left: 5%;
+    padding-right: 5%;
+    width:90%;
+}
+.item{
+    margin: 10px;
+    border: 3px solid #c51230;
+    border-radius: 10px;
+    background-color: white;
+    color: black;
+    width: 30%;
+    justify-content: space-around;
+}
+.item img{
+    width: 94%;
+    padding: 10px 3% 0px 3%;
+}
+.item h3{
+    margin-top: 0px;
+    padding-top: 10px;
+    font-size: 150%;
+    margin-left: 6%;
+    color: #c51230;
+}
+.item p{
+    font-size: 90%;
+    margin-left: 6%;
+}
+.button{
+    background-color: #c51230;
+    color: white;
+    border-radius: 5px;
+    padding:10px;
+}
+.button:hover{
+    background-color: white;
+    color: #c51230;
+}
+.select-buttons{
+    display: flex;
+    justify-content: space-around;
+    padding: 6px;
+    margin-bottom: 10px;
+}
+#quick-view{
+    display: flex;
+    background-color: rgb(183, 183, 183);
+}
+#images{
+    display: flex;
+}
+#front{
+    width: 45%;
+    height: auto;
+}
+#back{
+    width: 45%;
+    height: auto;
+}
+#quick-button{
+    background-color: #c51230;
+    color: white;
+    border-radius: 5px;
+    padding:10px;
+}
+#quick-button:hover{
+    background-color: white;
+    color: #c51230;
+}
+/*Details*/
+
+#detail-item-name{
+    font-size: 2.7rem;
+    margin-left: 5%;
+}
+
+#price{
+    font-size: 2rem;
+    color: #c51230;
+}
+
+#detail-content{
+    display: flex;
+    margin-left: 5%;
+    width: 90%;
+}
+#detail-right-content{
+    margin-left: 5%;
+}
+#detail-image{
+    width: 40%;
+}
+#side{
+    display:flex;
+    margin-top: 20px;
+}
+#color{
+    margin-top: 20px;
+    display:flex;
+}
+#side h4{
+    padding: 2px;
+    margin: 2px;
+}
+#color h4{
+    padding: 2px;
+    margin: 2px;
+}
+.button-side{
+    border-radius: 5px;
+    border: 2px solid #c51230;
+    margin-left: 5px;
+    background-color: #c51230;
+    color: white;
+    align-content: center;
+    padding: 4px;
+
+}
+.button-side:hover{
+    background-color: white;
+    color: #c51230;
+}
+.button-color{
+    border-radius: 5px;
+    border: 2px solid #c51230;
+    margin-left: 5px;
+    padding: 4px;
+}
+.button-color:hover{
+    background-color: black;
+    color:rgb(212, 212, 212);
+}
