@@ -88,7 +88,10 @@ for (var i = 0; i < targets.length; i++){
     targets[i].addEventListener('touchstart', function(event){
         start_time = new Date().getTime();
         isdragging = true;
-        dragging_element = drag_element;
+        if(dbclicking == false){
+            dragging_element = drag_element;
+        }
+        
         startpart.x = event.touches[0].clientX - drag_element.offsetLeft;
         startpart.y = event.touches[0].clientY - drag_element.offsetTop;
         startposition.x = drag_element.offsetLeft;
@@ -141,10 +144,12 @@ for (var i = 0; i < targets.length; i++){
             dragging_element.style.left = (event.touches[0].clientX - startpart.x) + 'px';
             dragging_element.style.top = (event.touches[0].clientY - startpart.y) + 'px';
             just_dragged = true;
+            console.log("touchmove1");
         }else if(isdragging && dragging_element != null && dbclicking == true){
             dragging_element.style.left = (event.touches[0].clientX - startpart.x) + 'px';
             dragging_element.style.top = (event.touches[0].clientY - startpart.y) + 'px';
             just_dragged = true;
+            console.log("touchmove2");
         }
         just_finger_moved = true;
     })
@@ -182,5 +187,14 @@ document.getElementById("workspace").addEventListener('click', function(event){
     }else{
         skip_next_release = false;
     }
-        
+});
+document.getElementById("workspace").addEventListener('touchmove', function(event){
+    if(dbclicking === true){
+        console.log(dragging_element);
+        dragging_element.style.left = (event.touches[0].clientX - startpart.x) + 'px';
+        dragging_element.style.top = (event.touches[0].clientY - startpart.y) + 'px';
+        console.log("touchmove3");
+        just_finger_moved = true;
+    }
+    
 })
