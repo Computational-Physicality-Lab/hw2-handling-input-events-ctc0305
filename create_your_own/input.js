@@ -17,7 +17,7 @@ let dbclicking = false;
 let dbclicked = false;
 let clicked = false;
 let skip_next_release = false;
-
+let just_finger_moved = false;
 let prev_touch_time = 0;
 for (var i = 0; i < targets.length; i++){
     targets[i].addEventListener('click', function(){
@@ -71,7 +71,6 @@ for (var i = 0; i < targets.length; i++){
         }else{
             skip_next_release = false;
         }
-        
     })
     targets[i].addEventListener('dblclick', function(event){
         clicked = false;
@@ -93,6 +92,7 @@ for (var i = 0; i < targets.length; i++){
         startposition.x = drag_element.offsetLeft;
         startposition.y = drag_element.offsetTop;
         just_dragged = false;
+        event.preventDefault();
     })
     targets[i].addEventListener('touchend', function(event){
         if(skip_next_release === true){
@@ -103,12 +103,15 @@ for (var i = 0; i < targets.length; i++){
                 dragging_element = null;
                 dbclicked = false;
                 just_dragged = false;
-            }else{
-                dbclicking = false;
-                dbclicked = true;
-                isdragging = false;
-                just_dragged = true;
+            }else{//double click 結束
+                if(just_finger_moved === false){
+                    dbclicking = false;
+                    dbclicked = true;
+                    isdragging = false;
+                    just_dragged = true;
+                }
             }
+            //double click event
             if(new Date().getTime() - prev_touch_time < 250 && prev_touch_time != 0){
                 clicked = false;
                 dbclicking = true;
@@ -118,8 +121,9 @@ for (var i = 0; i < targets.length; i++){
                 startpart.y = event.changedTouches[0].clientY - drag_element.offsetTop;
             }
         }
-        
         prev_touch_time = new Date().getTime();
+        just_finger_moved = false;
+        event.preventDefault();
     })
     targets[i].addEventListener('touchmove', function(event){
         if(isdragging && dragging_element != null && new Date().getTime() - start_time > 250){
@@ -131,6 +135,7 @@ for (var i = 0; i < targets.length; i++){
             dragging_element.style.top = (event.touches[0].clientY - startpart.y) + 'px';
             just_dragged = true;
         }
+        just_finger_moved = true;
     })
 }
 document.addEventListener('mousemove', function(event){
@@ -143,7 +148,6 @@ document.addEventListener('mousemove', function(event){
         dragging_element.style.top = (event.clientY - startpart.y) + 'px';
         just_dragged = true;
     }
-
 })
 document.addEventListener('keydown', function(event){
     if((event.key === "Escape" || event.key == "Esc") && dragging_element != null){
@@ -152,7 +156,6 @@ document.addEventListener('keydown', function(event){
         dragging_element.style.top = startposition.y + 'px';
         dragging_element = null;
     }
-
     just_dragged = false;
     skip_next_release = true;
 })
