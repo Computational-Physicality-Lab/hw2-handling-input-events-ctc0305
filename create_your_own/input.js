@@ -18,7 +18,7 @@ let dbclicked = false;
 let clicked = false;
 let skip_next_release = false;
 let just_finger_moved = false;
-let prev_touch_time = 0;
+let prev_touch_time = new Date().getTime();
 for (var i = 0; i < targets.length; i++){
     targets[i].addEventListener('click', function(){
         if(skip_next_release === false){
@@ -33,6 +33,7 @@ for (var i = 0; i < targets.length; i++){
                             }
                             clicked_item.style.backgroundColor = 'blue';
                             clicked = false;
+                            console.log("button_clicked");
                         }             
                     }, 250);
                         
@@ -82,6 +83,7 @@ for (var i = 0; i < targets.length; i++){
         startposition.x = drag_element.offsetLeft;
         startposition.y = drag_element.offsetTop;
         just_dragged = false;
+        console.log("button_double_clicked");
     })
     targets[i].addEventListener('touchstart', function(event){
         start_time = new Date().getTime();
@@ -97,33 +99,42 @@ for (var i = 0; i < targets.length; i++){
     targets[i].addEventListener('touchend', function(event){
         if(skip_next_release === true){
             skip_next_release = false;
+            console.log("skip_next_release");
         }else{
-            if(dbclicking == false){
-                isdragging = false;
-                dragging_element = null;
-                dbclicked = false;
-                just_dragged = false;
-            }else{//double click 結束
-                if(just_finger_moved === false){
-                    dbclicking = false;
-                    dbclicked = true;
+            if(just_finger_moved === false){
+                if(dbclicking == false){
                     isdragging = false;
-                    just_dragged = true;
+                    dragging_element = null;
+                    dbclicked = false;
+                    just_dragged = false;
+                }else{//double click 結束
+                    if(just_finger_moved === false){
+                        dbclicking = false;
+                        dbclicked = true;
+                        isdragging = false;
+                        just_dragged = true;
+                    }
+                }
+                //double click event
+                if(new Date().getTime() - prev_touch_time < 250){
+                    clicked = false;
+                    dbclicking = true;
+                    isdragging = true;
+                    dragging_element = drag_element;
+                    startpart.x = event.changedTouches[0].clientX - drag_element.offsetLeft;
+                    startpart.y = event.changedTouches[0].clientY - drag_element.offsetTop;
+                    let doubleclickEvent = new Event("dblclick");
+                    this.dispatchEvent(doubleclickEvent);
+                }else{
+                    let clickEvent = new Event("click");
+                    this.dispatchEvent(clickEvent);
                 }
             }
-            //double click event
-            if(new Date().getTime() - prev_touch_time < 250 && prev_touch_time != 0){
-                clicked = false;
-                dbclicking = true;
-                isdragging = true;
-                dragging_element = drag_element;
-                startpart.x = event.changedTouches[0].clientX - drag_element.offsetLeft;
-                startpart.y = event.changedTouches[0].clientY - drag_element.offsetTop;
-            }
+            event.preventDefault();
         }
         prev_touch_time = new Date().getTime();
         just_finger_moved = false;
-        event.preventDefault();
+        
     })
     targets[i].addEventListener('touchmove', function(event){
         if(isdragging && dragging_element != null && new Date().getTime() - start_time > 250){
@@ -155,9 +166,10 @@ document.addEventListener('keydown', function(event){
         dragging_element.style.left = startposition.x + 'px';
         dragging_element.style.top = startposition.y + 'px';
         dragging_element = null;
+        just_dragged = false;
+        skip_next_release = true;
     }
-    just_dragged = false;
-    skip_next_release = true;
+    
 })
 const background = document.querySelector('#workspace');
 document.getElementById("workspace").addEventListener('click', function(event){
