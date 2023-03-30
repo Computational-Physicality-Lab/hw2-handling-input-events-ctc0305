@@ -289,7 +289,12 @@ document.addEventListener('touchend', function(event){
             }
             //console.log('change back color');
 
-        }else if(statuses.state === 'none' && statuses.prev_state === 'none'){
+        }else if(statuses.state === 'skip'){
+            if(statuses.touch_number === 0){
+                statuses.state = 'none';
+            }
+        }
+        else if(statuses.state === 'none' && statuses.prev_state === 'none'){
             console.log("reset background color " + statuses.state + ' ' +statuses.prev_state);
                 for (var j = 0 ; j < targets.length; j++){
                     targets[j].style.backgroundColor = 'red';
