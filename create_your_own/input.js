@@ -1,200 +1,251 @@
-/*
-* all the code for homework 2 goes into this file.
-You will attach event handlers to the document, workspace, and targets defined in the html file
-to handle mouse, touch and possible other events.
 
-You will certainly need a large number of global variables to keep track of the current modes and states
-of the interaction.
+/*
+state contains:
+
+none: 預設狀態，沒有特別操作
+single_dragging: 單擊的拖曳狀態
+double_dragging: 雙擊的拖曳狀態
+waiting: 點選按鈕等待
+skip: 忽略下一次mouseup
+just_clicked: 剛剛mouse down，看有沒有要dragging
+
 */
-var targets = document.querySelectorAll(".target");
-let isdragging = false;
-let just_dragged = false;
-let dragging_element = null;
-let startpart = {x: 0, y: 0};
-let startposition = {x: 0, y: 0};
-let start_time = 0;
-let dbclicking = false;
-let dbclicked = false;
-let clicked = false;
-let skip_next_release = false;
-let just_finger_moved = false;
-let prev_touch_time = new Date().getTime();
-for (var i = 0; i < targets.length; i++){
+var statuses = {
+    "state": "none",
+    "prev_state": "none",
+    "object": null,
+    "startposx": 0,
+    "startposy": 0,
+    "startpartx": 0,
+    "startparty": 0,
+    "prev_time": new Date().getTime() - 300
+};
+//滑鼠的程式
+var targets = document.querySelectorAll('.target');
+for (var i = 0 ; i < targets.length; i++){
     targets[i].addEventListener('click', function(){
-        if(skip_next_release === false){
-            clicked_item = this;
-            if (clicked == false){
-                if(just_dragged === false){
-                    clicked = true;
-                    setTimeout(function(){
-                        if (clicked === true){
-                            for (var j = 0; j < targets.length; j++){
-                                targets[j].style.backgroundColor = 'red';
-                            }
-                            clicked_item.style.backgroundColor = 'blue';
-                            clicked = false;
-                            console.log("button_clicked");
-                        }             
-                    }, 250);
-                        
-                }else{
-                    just_dragged = false;
+        statuses.object = this;
+        if(statuses.state === "none" && statuses.prev_state === 'none'){
+            statuses.state = "waiting";
+            setTimeout(function(){
+                //點擊按鈕換顏色(避免和雙擊事件打架)
+                if(statuses.state === "waiting"){
+                    for (var j = 0 ; j < targets.length; j++){
+                        targets[j].style.backgroundColor = 'red';
+                    }
+                    statuses.object.style.backgroundColor = 'blue';
+                    console.log('change color');
+                    statuses.state = 'none';
                 }
-            }
-        }else{
-            skip_next_release = false;
-        }
-        
-    })
-    const drag_element = targets[i];
-    targets[i].addEventListener('mousedown', function(event){
-        start_time = new Date().getTime();
-        isdragging = true;
-        dragging_element = drag_element;
-        startpart.x = event.clientX - drag_element.offsetLeft;
-        startpart.y = event.clientY - drag_element.offsetTop;
-        startposition.x = drag_element.offsetLeft;
-        startposition.y = drag_element.offsetTop;
-        just_dragged = false;
-    })
-    targets[i].addEventListener('mouseup', function(){
-        if(skip_next_release === false){
-            if(dbclicking == false){
-                isdragging = false;
-                dragging_element = null;
-                dbclicked = false;
-            }else{
-                dbclicking = false;
-                dbclicked = true;
-                isdragging = false;
-                just_dragged = true;
-            }
-        }else{
-            skip_next_release = false;
+            }, 250);
+            statuses.prev_state === 'none'
+        }else if (statuses.state === 'skip'){
+            statuses.state = 'none';
+            statuses.prev_state = 'none';
         }
     })
     targets[i].addEventListener('dblclick', function(event){
-        clicked = false;
-        dbclicking = true;
-        isdragging = true;
-        dragging_element = drag_element;
-        startpart.x = event.clientX - drag_element.offsetLeft;
-        startpart.y = event.clientY - drag_element.offsetTop;
-        startposition.x = drag_element.offsetLeft;
-        startposition.y = drag_element.offsetTop;
-        just_dragged = false;
-        console.log("button_double_clicked");
+        statuses.state = 'double_dragging';
+        statuses.startpartx = event.clientX - statuses.object.offsetLeft;
+        statuses.startparty = event.clientY - statuses.object.offsetTop;
+        statuses.startposx = statuses.object.offsetLeft;
+        statuses.startposy = statuses.object.offsetTop;
     })
-    targets[i].addEventListener('touchstart', function(event){
-        start_time = new Date().getTime();
-        isdragging = true;
-        if(dbclicking == false){
-            dragging_element = drag_element;
+    targets[i].addEventListener('mousedown', function(event){
+        statuses.prev_time = new Date().getTime();
+        statuses.object = this;
+        statuses.startpartx = event.clientX - statuses.object.offsetLeft;
+        statuses.startparty = event.clientY - statuses.object.offsetTop;
+        statuses.startposx = statuses.object.offsetLeft;
+        statuses.startposy = statuses.object.offsetTop;
+        if(statuses.state === 'none'){
+            statuses.state = 'just_clicked';
         }
-        
-        startpart.x = event.touches[0].clientX - drag_element.offsetLeft;
-        startpart.y = event.touches[0].clientY - drag_element.offsetTop;
-        startposition.x = drag_element.offsetLeft;
-        startposition.y = drag_element.offsetTop;
-        just_dragged = false;
-        event.preventDefault();
+        console.log('mouse down');
     })
-    targets[i].addEventListener('touchend', function(event){
-        if(skip_next_release === true){
-            skip_next_release = false;
-            console.log("skip_next_release");
-        }else{
-            if(just_finger_moved === false){
-                if(dbclicking == false){
-                    isdragging = false;
-                    dragging_element = null;
-                    dbclicked = false;
-                    just_dragged = false;
-                }else{//double click 結束
-                    if(just_finger_moved === false){
-                        dbclicking = false;
-                        dbclicked = true;
-                        isdragging = false;
-                        just_dragged = true;
-                    }
-                }
-                //double click event
-                if(new Date().getTime() - prev_touch_time < 250){
-                    clicked = false;
-                    dbclicking = true;
-                    isdragging = true;
-                    dragging_element = drag_element;
-                    startpart.x = event.changedTouches[0].clientX - drag_element.offsetLeft;
-                    startpart.y = event.changedTouches[0].clientY - drag_element.offsetTop;
-                    let doubleclickEvent = new Event("dblclick");
-                    this.dispatchEvent(doubleclickEvent);
-                }else{
-                    let clickEvent = new Event("click");
-                    this.dispatchEvent(clickEvent);
-                }
-            }
-            event.preventDefault();
+    targets[i].addEventListener('mouseup', function(event){
+        if(statuses.state === 'single_dragging'){
+            statuses.object = null;
+            statuses.state = 'none';
+            console.log('stop single dragging');
+        }else if(statuses.state === 'waiting'){
+            statuses.prev_state = 'double_dragging';
+            statuses.object = null;
+            statuses.state = 'none';
+            console.log('stop waiting');
+        }else if(statuses.state === 'just_clicked'){
+            statuses.state = 'none';
+            statuses.prev_state = 'none';
+        }else if(statuses.state === 'double_dragging'){
+            statuses.state = 'none';
+        }else if(statuses.state === 'skip'){
+            statuses.state = 'none';
+            statuses.prev_state = 'single_dragging';
         }
-        prev_touch_time = new Date().getTime();
-        just_finger_moved = false;
-        
-    })
-    targets[i].addEventListener('touchmove', function(event){
-        if(isdragging && dragging_element != null && new Date().getTime() - start_time > 250){
-            dragging_element.style.left = (event.touches[0].clientX - startpart.x) + 'px';
-            dragging_element.style.top = (event.touches[0].clientY - startpart.y) + 'px';
-            just_dragged = true;
-            console.log("touchmove1");
-        }else if(isdragging && dragging_element != null && dbclicking == true){
-            dragging_element.style.left = (event.touches[0].clientX - startpart.x) + 'px';
-            dragging_element.style.top = (event.touches[0].clientY - startpart.y) + 'px';
-            just_dragged = true;
-            console.log("touchmove2");
-        }
-        just_finger_moved = true;
     })
 }
+document.addEventListener('click', function(event){
+    if(statuses.state === "none" && statuses.prev_state === 'none'){
+        if(!event.target.classList.contains("target")){
+            for (var j = 0 ; j < targets.length; j++){
+                targets[j].style.backgroundColor = 'red';
+            }
+            console.log('change back color');
+        }
+    }else{
+        statuses.prev_state = 'none';
+    }
+})
+document.addEventListener('mouseup', function(event){
+    if(statuses.state === 'skip'){
+        statuses.state = 'none';
+        statuses.prev_state = 'single_dragging';
+    }
+})
 document.addEventListener('mousemove', function(event){
-    if(isdragging && dragging_element != null && new Date().getTime() - start_time > 250){
-        dragging_element.style.left = (event.clientX - startpart.x) + 'px';
-        dragging_element.style.top = (event.clientY - startpart.y) + 'px';
-        just_dragged = true;
-    }else if(isdragging && dragging_element != null && dbclicking == true){
-        dragging_element.style.left = (event.clientX - startpart.x) + 'px';
-        dragging_element.style.top = (event.clientY - startpart.y) + 'px';
-        just_dragged = true;
+    if(statuses.state === "just_clicked" && new Date().getTime() - statuses.prev_time > 250){
+        statuses.state = 'single_dragging';
+    }
+    if(statuses.state === "single_dragging" && new Date().getTime() - statuses.prev_time > 250){
+        statuses.object.style.left = (event.clientX - statuses.startpartx) + 'px';
+        statuses.object.style.top = (event.clientY - statuses.startparty) + 'px';
+        statuses.prev_state = 'single_dragging';
+    }else if(statuses.state === "double_dragging" && new Date().getTime() - statuses.prev_time > 250){
+        statuses.object.style.left = (event.clientX - statuses.startpartx) + 'px';
+        statuses.object.style.top = (event.clientY - statuses.startparty) + 'px';
+        statuses.prev_state = 'double_dragging';
     }
 })
 document.addEventListener('keydown', function(event){
-    if((event.key === "Escape" || event.key == "Esc") && dragging_element != null){
-        isdragging = false;
-        dragging_element.style.left = startposition.x + 'px';
-        dragging_element.style.top = startposition.y + 'px';
-        dragging_element = null;
-        just_dragged = false;
-        skip_next_release = true;
+    if((event.key === 'Escape' || event.key == 'Esc') && statuses.object != null){
+        if(statuses.state === 'single_dragging'){
+            statuses.state = 'skip';
+            statuses.prev_state = 'single_dragging';
+        }else if(statuses.state === 'double_dragging'){
+            statuses.state = 'none';
+            statuses.prev_state = 'none';
+        }
+        statuses.object.style.left = statuses.startposx + 'px';
+        statuses.object.style.top = statuses.startposy + 'px';
+        statuses.object = null;
     }
-    
 })
-const background = document.querySelector('#workspace');
-document.getElementById("workspace").addEventListener('click', function(event){
-    if(skip_next_release === false){
-        if (!event.target.classList.contains('target') && just_dragged === false){
-            for (var j = 0; j < targets.length; j++){
-                targets[j].style.backgroundColor = 'red';
+
+//觸控的程式
+
+for(var i = 0; i < targets.length; i++){
+    targets[i].addEventListener('single_touch', function(){
+        statuses.object = this;
+        console.log(statuses.object)
+        if(statuses.state === "none" && statuses.prev_state === 'none'){
+            statuses.state = "waiting";
+            setTimeout(function(){
+                //點擊按鈕換顏色(避免和雙擊事件打架)
+                if(statuses.state === "waiting"){
+                    for (var j = 0 ; j < targets.length; j++){
+                        targets[j].style.backgroundColor = 'red';
+                    }
+                    statuses.object.style.backgroundColor = 'blue';
+                    console.log('change color');
+                    statuses.state = 'none';
+                }
+            }, 250);
+            statuses.prev_state === 'none'
+        }else if (statuses.state === 'skip'){
+            statuses.state = 'none';
+            statuses.prev_state = 'none';
+        }
+    })
+    targets[i].addEventListener('double_touch', function(){
+        statuses.state = 'skip';
+        statuses.prev_state = 'none';
+        //console.log('double_touch');
+
+    })
+    targets[i].addEventListener('touchstart', function(event){
+        if(statuses.state != "double_dragging"){
+            statuses.object = this;
+            statuses.startpartx = event.touches[0].clientX - statuses.object.offsetLeft;
+            statuses.startparty = event.touches[0].clientY - statuses.object.offsetTop;
+            statuses.startposx = statuses.object.offsetLeft;
+            statuses.startposy = statuses.object.offsetTop;
+            statuses.state = 'just_touched';
+            //console.log(statuses.state);
+        }
+        statuses.prev_state = 'none';
+        //statuses.prev_time = new Date().getTime();
+        event.preventDefault();
+    })
+    targets[i].addEventListener('touchend', function(event){
+        console.log(statuses.state, statuses.prev_state);
+        if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
+            statuses.state = 'double_dragging';
+        }else{
+            if(statuses.state === 'skip'){
+                statuses.state = 'none';
+            }else if(statuses.state === 'just_touched'){
+                let touch_click = new Event("single_touch");
+                statuses.state = 'none';
+                this.dispatchEvent(touch_click);
+                
+                //statuses.object = null;
+            }else if(statuses.state === 'single_dragging'){
+                statuses.state = 'none';
+                statuses.object = null;
+            }else if(statuses.state === 'double_dragging'){
+                if(statuses.prev_state === 'none'){
+                    statuses.state = 'none';
+                }
             }
         }
-    }else{
-        skip_next_release = false;
+        console.log('touch_end')
+        console.log(statuses.state);
+        statuses.prev_time = new Date().getTime();
+        event.preventDefault();
+    })
+    targets[i].addEventListener('touchmove', function(event){
+        if(statuses.state === 'just_touched' && new Date().getTime() - statuses.prev_time > 250){
+            statuses.state = 'single_dragging';
+        }
+        if(statuses.state === 'single_dragging' && new Date().getTime() - statuses.prev_time > 250){
+            statuses.object.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
+            statuses.object.style.top = (event.touches[0].clientY - statuses.startparty) + 'px';
+        }
+        //console.log(statuses.state);
+        event.preventDefault();
+    })
+}
+document.addEventListener('touchmove', function(event){
+    if(statuses.state === "double_dragging"){
+        statuses.object.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
+        statuses.object.style.top = (event.touches[0].clientY - statuses.startparty) + 'px';
+        statuses.prev_state = 'double_dragging';
     }
-});
-document.getElementById("workspace").addEventListener('touchmove', function(event){
-    if(dbclicking === true){
-        console.log(dragging_element);
-        dragging_element.style.left = (event.touches[0].clientX - startpart.x) + 'px';
-        dragging_element.style.top = (event.touches[0].clientY - startpart.y) + 'px';
-        console.log("touchmove3");
-        just_finger_moved = true;
+    //console.log(statuses.state);
+    event.preventDefault();
+})
+document.addEventListener('touchstart', function(event){
+    if(!event.target.classList.contains("target")){
+        if(statuses.state === "double_dragging"){
+            statuses.prev_state = 'none';
+        }
     }
-    
+    event.preventDefault();
+})
+document.addEventListener('touchend', function(event){
+    if(!event.target.classList.contains("target")){
+        console.log(statuses.state, statuses.prev_state);
+        if(statuses.state === 'double_dragging'){
+            if(statuses.prev_state === 'none'){
+                statuses.state = 'none';
+                statuses.prev_state = 'none';
+            }
+            //console.log('change back color');
+        }else if(statuses.state === 'none' && statuses.prev_state === 'none'){
+                for (var j = 0 ; j < targets.length; j++){
+                    targets[j].style.backgroundColor = 'red';
+                }
+        } 
+    }
+    event.preventDefault();
 })
