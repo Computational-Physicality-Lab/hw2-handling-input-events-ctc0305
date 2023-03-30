@@ -250,7 +250,7 @@ document.addEventListener('touchstart', function(event){
             }
         }else if(statuses.touch_number === 2){
             if(statuses.state === "double_dragging"){
-                statuses.state = 'none';
+                statuses.state = 'skip';
                 statuses.prev_state = 'none';
                 statuses.object.style.left = statuses.startposx + 'px';
                 statuses.object.style.top = statuses.startposy + 'px';
@@ -267,6 +267,15 @@ document.addEventListener('touchend', function(event){
         console.log("background touchend " + statuses.state + ' ' +statuses.prev_state);
         if(statuses.state === 'double_dragging'){
             if(statuses.prev_state === 'none'){
+                if(statuses.touch_number > 0){
+                    console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state);
+                    statuses.state = 'skip';
+                }else{
+                    console.log("skipped" + statuses.state + ' ' +statuses.prev_state);
+                    statuses.state = 'none';
+                }
+            }else if(statuses.prev_state === 'double_dragging'){
+                statuses.prev_state = 'none';
                 if(statuses.touch_number > 0){
                     console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state);
                     statuses.state = 'skip';
