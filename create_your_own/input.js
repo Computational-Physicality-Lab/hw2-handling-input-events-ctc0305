@@ -178,7 +178,7 @@ for(var i = 0; i < targets.length; i++){
         }else if(statuses.touch_number === 2){
             if(statuses.state === "double_dragging"){
                 statuses.state = 'none';
-                statuses.prev_state = 'none';
+                statuses.prev_state = 'skip';
                 statuses.object.style.left = statuses.startposx + 'px';
                 statuses.object.style.top = statuses.startposy + 'px';
                 statuses.object = null;
@@ -194,7 +194,7 @@ for(var i = 0; i < targets.length; i++){
         if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
             statuses.state = 'double_dragging';
         }else{
-            if(statuses.state === 'skip'){
+            if(statuses.state === 'skip' && statuses.touch_number === 0){
                 statuses.state = 'none';
             }else if(statuses.state === 'just_touched'){
                 let touch_click = new Event("single_touch");
@@ -206,7 +206,7 @@ for(var i = 0; i < targets.length; i++){
                 statuses.state = 'none';
                 statuses.object = null;
             }else if(statuses.state === 'double_dragging'){
-                if(statuses.prev_state === 'none'){
+                if(statuses.prev_state === 'none' && statuses.touch_number === 0){
                     statuses.state = 'none';
                 }
             }
@@ -238,7 +238,6 @@ document.addEventListener('touchmove', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
-    
     if(!event.target.classList.contains("target")){
         statuses.touch_number += 1;
         if(statuses.touch_number === 1){
@@ -256,7 +255,6 @@ document.addEventListener('touchstart', function(event){
         }
             
     }
-    
     event.preventDefault();
 })
 document.addEventListener('touchend', function(event){
@@ -265,8 +263,11 @@ document.addEventListener('touchend', function(event){
         console.log(statuses.state, statuses.prev_state);
         if(statuses.state === 'double_dragging'){
             if(statuses.prev_state === 'none'){
-                statuses.state = 'none';
-                statuses.prev_state = 'none';
+                if(statuses.touch_number > 0){
+                    statuses.state = 'skip';
+                }else{
+                    statuses.state = 'none';
+                }
             }
             //console.log('change back color');
         }else if(statuses.state === 'none' && statuses.prev_state === 'none'){
