@@ -135,7 +135,9 @@ document.addEventListener('keydown', function(event){
 //觸控的程式
 
 for(var i = 0; i < targets.length; i++){
+    
     targets[i].addEventListener('single_touch', function(){
+        console.log("target single touch" + statuses.state + ' ' +statuses.prev_state);
         statuses.object = this;
         console.log(statuses.object)
         if(statuses.state === "none" && statuses.prev_state === 'none'){
@@ -159,6 +161,7 @@ for(var i = 0; i < targets.length; i++){
         }
     })
     targets[i].addEventListener('touchstart', function(event){
+        console.log("target touchstart " + statuses.state + ' ' +statuses.prev_state);
         statuses.touch_number += 1;
         if(statuses.touch_number === 1){
             if(statuses.state != "double_dragging"){
@@ -185,8 +188,9 @@ for(var i = 0; i < targets.length; i++){
         event.preventDefault();
     })
     targets[i].addEventListener('touchend', function(event){
+        console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state);
         statuses.touch_number -= 1;
-        console.log(statuses.state, statuses.prev_state, 'touchend');
+        //console.log(statuses.state, statuses.prev_state, 'touchend');
         if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
             statuses.state = 'double_dragging';
         }else{
@@ -209,12 +213,13 @@ for(var i = 0; i < targets.length; i++){
                 }
             }
         }
-        console.log('touch_end')
-        console.log(statuses.state);
+        //console.log('touch_end')
+        //console.log(statuses.state);
         statuses.prev_time = new Date().getTime();
         event.preventDefault();
     })
     targets[i].addEventListener('touchmove', function(event){
+        
         if(statuses.state === 'just_touched' && new Date().getTime() - statuses.prev_time > 250){
             statuses.state = 'single_dragging';
         }
@@ -237,6 +242,7 @@ document.addEventListener('touchmove', function(event){
 })
 document.addEventListener('touchstart', function(event){
     if(!event.target.classList.contains("target")){
+        console.log("background touchstart" + statuses.state + ' ' +statuses.prev_state);
         statuses.touch_number += 1;
         if(statuses.touch_number === 1){
             if(statuses.state === "double_dragging"){
@@ -258,23 +264,21 @@ document.addEventListener('touchstart', function(event){
 document.addEventListener('touchend', function(event){
     if(!event.target.classList.contains("target")){
         statuses.touch_number -= 1;
-        console.log(statuses.state + ' ' +statuses.prev_state);
+        console.log("background touchend " + statuses.state + ' ' +statuses.prev_state);
         if(statuses.state === 'double_dragging'){
             if(statuses.prev_state === 'none'){
                 if(statuses.touch_number > 0){
+                    console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state);
                     statuses.state = 'skip';
                 }else{
+                    console.log("skipped" + statuses.state + ' ' +statuses.prev_state);
                     statuses.state = 'none';
                 }
             }
             //console.log('change back color');
 
-        }else if(statuses.state === 'skip'){
-            if(statuses.touch_number === 0){
-                statuses.prev_state = 0;
-                statuses.state = 0;
-            }
         }else if(statuses.state === 'none' && statuses.prev_state === 'none'){
+            console.log("reset background color " + statuses.state + ' ' +statuses.prev_state);
                 for (var j = 0 ; j < targets.length; j++){
                     targets[j].style.backgroundColor = 'red';
                 }
