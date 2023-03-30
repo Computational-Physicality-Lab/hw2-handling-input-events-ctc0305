@@ -238,10 +238,22 @@ document.addEventListener('touchmove', function(event){
 })
 document.addEventListener('touchstart', function(event){
     if(!event.target.classList.contains("target")){
-        if(statuses.state === "double_dragging"){
-            statuses.prev_state = 'none';
+        if(statuses.touch_number === 1){
+            if(statuses.state === "double_dragging"){
+                statuses.prev_state = 'none';
+            }
+        }else if(statuses.touch_number === 2){
+            if(statuses.state === "double_dragging"){
+                statuses.state = 'none';
+                statuses.prev_state = 'none';
+                statuses.object.style.left = statuses.startposx + 'px';
+                statuses.object.style.top = statuses.startposy + 'px';
+                statuses.object = null;
+            }
         }
+            
     }
+    
     event.preventDefault();
 })
 document.addEventListener('touchend', function(event){
