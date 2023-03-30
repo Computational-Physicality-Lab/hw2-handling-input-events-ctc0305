@@ -250,7 +250,7 @@ document.addEventListener('touchstart', function(event){
             }
         }else if(statuses.touch_number === 2){
             if(statuses.state === "double_dragging"){
-                statuses.state = 'none';
+                statuses.state = 'skip';
                 statuses.prev_state = 'none';
                 statuses.object.style.left = statuses.startposx + 'px';
                 statuses.object.style.top = statuses.startposy + 'px';
