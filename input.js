@@ -137,7 +137,7 @@ document.addEventListener('keydown', function(event){
 for(var i = 0; i < targets.length; i++){
     
     targets[i].addEventListener('single_touch', function(){
-        console.log("target single touch" + statuses.state + ' ' +statuses.prev_state);
+        console.log("target single touch" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         statuses.object = this;
         console.log(statuses.object)
         if(statuses.state === "none" && statuses.prev_state === 'none'){
@@ -161,8 +161,9 @@ for(var i = 0; i < targets.length; i++){
         }
     })
     targets[i].addEventListener('touchstart', function(event){
-        console.log("target touchstart " + statuses.state + ' ' +statuses.prev_state);
         statuses.touch_number += 1;
+        console.log("target touchstart " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
+        
         if(statuses.touch_number === 1){
             if(statuses.state != "double_dragging"){
                 statuses.object = this;
@@ -188,8 +189,9 @@ for(var i = 0; i < targets.length; i++){
         event.preventDefault();
     })
     targets[i].addEventListener('touchend', function(event){
-        console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state);
         statuses.touch_number -= 1;
+        console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
+        
         //console.log(statuses.state, statuses.prev_state, 'touchend');
         if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
             statuses.state = 'double_dragging';
@@ -230,7 +232,15 @@ for(var i = 0; i < targets.length; i++){
         //console.log(statuses.state);
         event.preventDefault();
     })
+    targets[i].addEventListener('touchcancel', function(event){
+        statuses.touch_number -= 1;
+    })
 }
+document.addEventListener('touchcancel', function(event){
+    if(!event.target.classList.contains('target')){
+        statuses.touch_number -= 1;
+    }
+})
 document.addEventListener('touchmove', function(event){
     if(statuses.state === "double_dragging"){
         statuses.object.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
@@ -242,8 +252,9 @@ document.addEventListener('touchmove', function(event){
 })
 document.addEventListener('touchstart', function(event){
     if(!event.target.classList.contains("target")){
-        console.log("background touchstart" + statuses.state + ' ' +statuses.prev_state);
         statuses.touch_number += 1;
+        console.log("background touchstart" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
+        
         if(statuses.touch_number === 1){
             if(statuses.state === "double_dragging"){
                 statuses.prev_state = 'none';
@@ -264,29 +275,34 @@ document.addEventListener('touchstart', function(event){
 document.addEventListener('touchend', function(event){
     if(!event.target.classList.contains("target")){
         statuses.touch_number -= 1;
-        console.log("background touchend " + statuses.state + ' ' +statuses.prev_state);
+        console.log("background touchend " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         if(statuses.state === 'double_dragging'){
             if(statuses.prev_state === 'none'){
                 if(statuses.touch_number > 0){
-                    console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state);
+                    console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
                     statuses.state = 'skip';
                 }else{
-                    console.log("skipped" + statuses.state + ' ' +statuses.prev_state);
+                    console.log("skipped" + statuses.state + ' ' +statuses.prev_state  + ' ' + statuses.touch_number);
                     statuses.state = 'none';
                 }
             }else if(statuses.prev_state === 'double_dragging'){
                 statuses.prev_state = 'none';
                 if(statuses.touch_number > 0){
-                    console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state);
+                    console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state  + ' ' + statuses.touch_number);
                     statuses.state = 'skip';
                 }else{
-                    console.log("skipped" + statuses.state + ' ' +statuses.prev_state);
+                    console.log("skipped" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
                     statuses.state = 'none';
                 }
             }
             //console.log('change back color');
 
-        }else if(statuses.state === 'none' && statuses.prev_state === 'none'){
+        }else if(statuses.state === 'skip'){
+            if(statuses.touch_number === 0){
+                statuses.state = 'none';
+            }
+        }
+        else if(statuses.state === 'none' && statuses.prev_state === 'none'){
             console.log("reset background color " + statuses.state + ' ' +statuses.prev_state);
                 for (var j = 0 ; j < targets.length; j++){
                     targets[j].style.backgroundColor = 'red';
