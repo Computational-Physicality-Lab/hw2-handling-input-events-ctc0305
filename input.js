@@ -135,8 +135,9 @@ document.addEventListener('keydown', function(event){
 //觸控的程式
 
 for(var i = 0; i < targets.length; i++){
-    console.log("target single touch" + statuses.state + ' ' +statuses.prev_state);
+    
     targets[i].addEventListener('single_touch', function(){
+        console.log("target single touch" + statuses.state + ' ' +statuses.prev_state);
         statuses.object = this;
         console.log(statuses.object)
         if(statuses.state === "none" && statuses.prev_state === 'none'){
@@ -189,7 +190,7 @@ for(var i = 0; i < targets.length; i++){
     targets[i].addEventListener('touchend', function(event){
         console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state);
         statuses.touch_number -= 1;
-        console.log(statuses.state, statuses.prev_state, 'touchend');
+        //console.log(statuses.state, statuses.prev_state, 'touchend');
         if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
             statuses.state = 'double_dragging';
         }else{
@@ -212,8 +213,8 @@ for(var i = 0; i < targets.length; i++){
                 }
             }
         }
-        console.log('touch_end')
-        console.log(statuses.state);
+        //console.log('touch_end')
+        //console.log(statuses.state);
         statuses.prev_time = new Date().getTime();
         event.preventDefault();
     })
@@ -266,6 +267,15 @@ document.addEventListener('touchend', function(event){
         console.log("background touchend " + statuses.state + ' ' +statuses.prev_state);
         if(statuses.state === 'double_dragging'){
             if(statuses.prev_state === 'none'){
+                if(statuses.touch_number > 0){
+                    console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state);
+                    statuses.state = 'skip';
+                }else{
+                    console.log("skipped" + statuses.state + ' ' +statuses.prev_state);
+                    statuses.state = 'none';
+                }
+            }else if(statuses.prev_state === 'double_dragging'){
+                statuses.prev_state = 'none';
                 if(statuses.touch_number > 0){
                     console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state);
                     statuses.state = 'skip';
