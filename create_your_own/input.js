@@ -164,7 +164,7 @@ for(var i = 0; i < targets.length; i++){
 
     })
     targets[i].addEventListener('touchstart', function(event){
-        statuses.touch_number = event.touches.length;
+        statuses.touch_number += 1;
         if(statuses.touch_number === 1){
             if(statuses.state != "double_dragging"){
                 statuses.object = this;
@@ -189,6 +189,7 @@ for(var i = 0; i < targets.length; i++){
         event.preventDefault();
     })
     targets[i].addEventListener('touchend', function(event){
+        statuses.touch_number -= 1;
         console.log(statuses.state, statuses.prev_state);
         if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
             statuses.state = 'double_dragging';
@@ -237,8 +238,9 @@ document.addEventListener('touchmove', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
-    statuses.touch_number = event.touches.length;
+    
     if(!event.target.classList.contains("target")){
+        statuses.touch_number += 1;
         if(statuses.touch_number === 1){
             if(statuses.state === "double_dragging"){
                 statuses.prev_state = 'none';
@@ -259,6 +261,7 @@ document.addEventListener('touchstart', function(event){
 })
 document.addEventListener('touchend', function(event){
     if(!event.target.classList.contains("target")){
+        statuses.touch_number -= 1;
         console.log(statuses.state, statuses.prev_state);
         if(statuses.state === 'double_dragging'){
             if(statuses.prev_state === 'none'){
