@@ -237,6 +237,7 @@ document.addEventListener('touchmove', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
+    statuses.touch_number = event.touches.length;
     if(!event.target.classList.contains("target")){
         if(statuses.touch_number === 1){
             if(statuses.state === "double_dragging"){
