@@ -18,7 +18,8 @@ var statuses = {
     "startposy": 0,
     "startpartx": 0,
     "startparty": 0,
-    "prev_time": new Date().getTime() - 300
+    "prev_time": new Date().getTime() - 300,
+    "touch_number": 0
 };
 //滑鼠的程式
 var targets = document.querySelectorAll('.target');
@@ -163,14 +164,25 @@ for(var i = 0; i < targets.length; i++){
 
     })
     targets[i].addEventListener('touchstart', function(event){
-        if(statuses.state != "double_dragging"){
-            statuses.object = this;
-            statuses.startpartx = event.touches[0].clientX - statuses.object.offsetLeft;
-            statuses.startparty = event.touches[0].clientY - statuses.object.offsetTop;
-            statuses.startposx = statuses.object.offsetLeft;
-            statuses.startposy = statuses.object.offsetTop;
-            statuses.state = 'just_touched';
-            //console.log(statuses.state);
+        statuses.touch_number = event.touches.length;
+        if(statuses.touch_number === 1){
+            if(statuses.state != "double_dragging"){
+                statuses.object = this;
+                statuses.startpartx = event.touches[0].clientX - statuses.object.offsetLeft;
+                statuses.startparty = event.touches[0].clientY - statuses.object.offsetTop;
+                statuses.startposx = statuses.object.offsetLeft;
+                statuses.startposy = statuses.object.offsetTop;
+                statuses.state = 'just_touched';
+                //console.log(statuses.state);
+            }
+        }else if(statuses.touch_number === 2){
+            if(statuses.state === "double_dragging"){
+                statuses.state = 'none';
+                statuses.prev_state = 'none';
+                statuses.object.style.left = statuses.startposx + 'px';
+                statuses.object.style.top = statuses.startposy + 'px';
+                statuses.object = null;
+            }
         }
         statuses.prev_state = 'none';
         //statuses.prev_time = new Date().getTime();
