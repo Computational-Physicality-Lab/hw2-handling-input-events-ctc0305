@@ -232,7 +232,13 @@ for(var i = 0; i < targets.length; i++){
         //console.log(statuses.state);
         event.preventDefault();
     })
+    targets[i].addEventListener('touchcancel', function(event){
+        statuses.touch_number -= 1;
+    })
 }
+document.addEventListener('touchcancel', function(event){
+    statuses.touch_number -= 1;
+})
 document.addEventListener('touchmove', function(event){
     if(statuses.state === "double_dragging"){
         statuses.object.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
