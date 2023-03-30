@@ -152,16 +152,11 @@ for(var i = 0; i < targets.length; i++){
                 }
             }, 250);
             statuses.prev_state === 'none'
+        //還原成預設狀態
         }else if (statuses.state === 'skip'){
             statuses.state = 'none';
             statuses.prev_state = 'none';
         }
-    })
-    targets[i].addEventListener('double_touch', function(){
-        statuses.state = 'skip';
-        statuses.prev_state = 'none';
-        //console.log('double_touch');
-
     })
     targets[i].addEventListener('touchstart', function(event){
         statuses.touch_number += 1;
@@ -176,9 +171,10 @@ for(var i = 0; i < targets.length; i++){
                 //console.log(statuses.state);
             }
         }else if(statuses.touch_number === 2){
+            //雙指觸控暫停
             if(statuses.state === "double_dragging"){
-                statuses.state = 'none';
-                statuses.prev_state = 'skip';
+                statuses.state = 'skip';
+                statuses.prev_state = 'none';
                 statuses.object.style.left = statuses.startposx + 'px';
                 statuses.object.style.top = statuses.startposy + 'px';
                 statuses.object = null;
@@ -190,12 +186,14 @@ for(var i = 0; i < targets.length; i++){
     })
     targets[i].addEventListener('touchend', function(event){
         statuses.touch_number -= 1;
-        console.log(statuses.state, statuses.prev_state);
+        console.log(statuses.state, statuses.prev_state, 'touchend');
         if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
             statuses.state = 'double_dragging';
         }else{
             if(statuses.state === 'skip' && statuses.touch_number === 0){
+                //暫停後放掉，回歸閒置狀態
                 statuses.state = 'none';
+                statuses.prev_state = 'none';
             }else if(statuses.state === 'just_touched'){
                 let touch_click = new Event("single_touch");
                 statuses.state = 'none';
@@ -270,6 +268,12 @@ document.addEventListener('touchend', function(event){
                 }
             }
             //console.log('change back color');
+
+        }else if(statuses.state === 'skip'){
+            if(statuses.touch_number === 0){
+                statuses.prev_state = 0;
+                statuses.state = 0;
+            }
         }else if(statuses.state === 'none' && statuses.prev_state === 'none'){
                 for (var j = 0 ; j < targets.length; j++){
                     targets[j].style.backgroundColor = 'red';
