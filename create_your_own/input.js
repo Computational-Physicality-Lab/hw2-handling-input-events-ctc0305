@@ -23,7 +23,9 @@ var statuses = {
     "prev_start_time": new Date().getTime() - 300,
     "touch_number": 0,
     "startwidth": 0,
-    "startfingerwidth": 0
+    "startheight": 0,
+    "startfingerwidth": 0,
+    "startfingerheight": 0
 };
 //滑鼠的程式
 var targets = document.querySelectorAll('.target');
@@ -268,13 +270,28 @@ document.addEventListener('touchmove', function(event){
     if(statuses.state === "double_dragging"){
         statuses.object.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
         statuses.object.style.top = (event.touches[0].clientY - statuses.startparty) + 'px';
-        statuses.prev_state = 'double_dragging';
+        //statuses.prev_state = 'double_dragging';
     }else if(statuses.state === "amplify_x"){
         if(event.touches.length === 2){
             if(statuses.startwidth * Math.abs(event.touches[1].clientX-event.touches[0].clientX) / statuses.startfingerwidth > 30){
                 statuses.object.style.width = statuses.startwidth * Math.abs(event.touches[1].clientX-event.touches[0].clientX) / statuses.startfingerwidth + 'px';
                 statuses.object.style.left = statuses.startposx - 0.5 * statuses.object.offsetWidth + 'px';
                 statuses.prev_state = 'amplify_x';
+            }
+        }else if(event.touches.length === 1){
+            statuses.state = 'skip';
+            statuses.state = 'none';
+            statuses.object = null;
+        }else if(event.touches.length === 3){
+            statuses.object.style.width = statuses.startwidth + 'px';
+            statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
+        }
+    }else if(statuses.state === "amplify_y"){
+        if(event.touches.length === 2){
+            if(statuses.startwidth * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight > 30){
+                statuses.object.style.width = statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight + 'px';
+                statuses.object.style.top = statuses.startposy - 0.5 * statuses.object.offsetHeight + 'px';
+                statuses.prev_state = 'amplify_y';
             }
         }else if(event.touches.length === 1){
             statuses.state = 'skip';
@@ -296,6 +313,12 @@ document.addEventListener('touchstart', function(event){
             statuses.startposy = statuses.selected.offsetTop;
             statuses.startwidth = statuses.selected.offsetWidth;
             statuses.startfingerwidth = Math.abs(event.touches[1].clientX - event.touches[0].clientX);
+        }else{
+            statuses.state = "amplify_y";
+            statuses.startposx = statuses.selected.offsetLeft ;
+            statuses.startposy = statuses.selected.offsetTop+ 0.5 * statuses.selected.offsetHeight;
+            statuses.startwidth = statuses.selected.offsetWidth;
+            statuses.startfingerwidth = Math.abs(event.touches[1].clientY - event.touches[0].clientY);
         }
     }else if(!event.target.classList.contains("target")){
         statuses.touch_number += 1;
