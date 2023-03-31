@@ -212,6 +212,11 @@ for(var i = 0; i < targets.length; i++){
         if(new Date().getTime() - statuses.prev_time < 250 && statuses.selected === this){
             statuses.state = 'double_dragging';
             statuses.object = 'this';
+            statuses.selected = 'this';
+            for (var j = 0 ; j < targets.length; j++){
+                targets[j].style.backgroundColor = 'red';
+            }
+            statuses.selected.style.backgroundColor = 'blue';
 
         }else{
             if(statuses.state === 'skip' && statuses.touch_number === 0){
