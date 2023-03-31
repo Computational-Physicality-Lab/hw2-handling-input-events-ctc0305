@@ -243,14 +243,15 @@ document.addEventListener('touchcancel', function(event){
     statuses.touch_number = 0;
 })
 document.addEventListener('touchmove', function(event){
+    
     if(statuses.state === "double_dragging"){
         statuses.object.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
         statuses.object.style.top = (event.touches[0].clientY - statuses.startparty) + 'px';
         statuses.prev_state = 'double_dragging';
     }else if(statuses.state === "amplify_x"){
         if(event.touches.length === 2){
-            statuses.object.style.width = statuses.startwidth * Math.abs(event.touches[1].clientX-event.touches[0].clientX) / statuses.startfingerwidth;
-            statuses.object.style.left = statuses.startposx - 0.5 * statuses.object.style.width;
+            statuses.object.style.width = statuses.startwidth * Math.abs(event.touches[1].clientX-event.touches[0].clientX) / statuses.startfingerwidth + 'px';
+            statuses.object.style.left = statuses.startposx - 0.5 * statuses.object.style.width + 'px';
             statuses.prev_state = 'amplify_x';
         }else if(event.touches.length == 1){
             statuses.state = 'skip';
@@ -262,7 +263,7 @@ document.addEventListener('touchmove', function(event){
 })
 document.addEventListener('touchstart', function(event){
     if(event.touches.length === 2 && statuses.object != null && new Date().getTime() - prev_start_time < 150){
-        if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - even.touches[0].clientY)){
+        if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
             statuses.state = "amplify_x";
             statuses.startposx = statuses.object.offsetLeft + 0.5 * statuses.object.offsetWidth;
             statuses.startposy = statuses.object.offsetTop;
