@@ -175,7 +175,7 @@ for(var i = 0; i < targets.length; i++){
                     statuses.state = 'none';
                 }
             }, 250);
-            statuses.prev_state === 'none'
+            statuses.prev_state === 'none';
         //還原成預設狀態
         }else if (statuses.state === 'skip'){
             statuses.state = 'none';
@@ -252,7 +252,7 @@ for(var i = 0; i < targets.length; i++){
         }
         //console.log('touch_end')
         //console.log(statuses.state);
-        statuses.prev_time = new Date().getTime();
+        
         event.preventDefault();
     })
     targets[i].addEventListener('touchmove', function(event){
@@ -319,7 +319,9 @@ document.addEventListener('touchmove', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
-    statuses.cancelled = false;
+    if(event.touches.length === 1){
+        statuses.cancelled = false;
+    }
     if(event.touches.length === 2 && statuses.selected != null && new Date().getTime() - prev_start_time < 250){
         if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
             statuses.state = "amplify_x";
@@ -366,8 +368,10 @@ document.addEventListener('touchend', function(event){
                     console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
                     statuses.state = 'skip';
                 }else{
-                    console.log("skipped" + statuses.state + ' ' +statuses.prev_state  + ' ' + statuses.touch_number);
-                    statuses.state = 'none';
+                    if(statuses.cancelled === true){
+                        console.log("skipped" + statuses.state + ' ' +statuses.prev_state  + ' ' + statuses.touch_number);
+                        statuses.state = 'none';
+                    }
                 }
             }else if(statuses.prev_state === 'double_dragging'){
                 statuses.prev_state = 'none';
@@ -395,5 +399,6 @@ document.addEventListener('touchend', function(event){
                 statuses.selected = null;
         } 
     }
+    statuses.prev_time = new Date().getTime();
     event.preventDefault();
 })
