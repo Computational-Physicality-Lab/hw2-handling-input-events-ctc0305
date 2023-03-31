@@ -181,6 +181,7 @@ for(var i = 0; i < targets.length; i++){
         console.log("target touchstart " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         
         if(statuses.touch_number === 1){
+            //可能是單擊拖曳事件
             if(statuses.state != "double_dragging"){
                 statuses.object = this;
                 statuses.startpartx = event.touches[0].clientX - statuses.object.offsetLeft;
@@ -211,8 +212,8 @@ for(var i = 0; i < targets.length; i++){
         //console.log(statuses.state, statuses.prev_state, 'touchend');
         if(new Date().getTime() - statuses.prev_time < 250 && statuses.selected === this){
             statuses.state = 'double_dragging';
-            statuses.object = 'this';
-            statuses.selected = 'this';
+            statuses.object = this;
+            statuses.selected = this;
             for (var j = 0 ; j < targets.length; j++){
                 targets[j].style.backgroundColor = 'red';
             }
@@ -353,6 +354,8 @@ document.addEventListener('touchend', function(event){
                 for (var j = 0 ; j < targets.length; j++){
                     targets[j].style.backgroundColor = 'red';
                 }
+                statuses.object = null;
+                statuses.selected = null;
         } 
     }
     event.preventDefault();
