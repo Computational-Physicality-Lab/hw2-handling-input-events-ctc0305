@@ -136,7 +136,10 @@ document.addEventListener('keydown', function(event){
 })
 
 //觸控的程式
-
+for(var i = 0; i < targets.length; i++){
+    targets[i].object.setAttribute('style', 'min-width: 25px;');
+    targets[i].object.setAttribute('style', 'min-height: 25px;');
+}
 for(var i = 0; i < targets.length; i++){
     
     targets[i].addEventListener('single_touch', function(){
