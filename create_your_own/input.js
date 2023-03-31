@@ -14,6 +14,7 @@ var statuses = {
     "state": "none",
     "prev_state": "none",
     "object": null,
+    "selected": null,
     "startposx": 0,
     "startposy": 0,
     "startpartx": 0,
@@ -29,6 +30,7 @@ var targets = document.querySelectorAll('.target');
 for (var i = 0 ; i < targets.length; i++){
     targets[i].addEventListener('click', function(){
         statuses.object = this;
+        statuses.selected = this;
         if(statuses.state === "none" && statuses.prev_state === 'none'){
             statuses.state = "waiting";
             setTimeout(function(){
@@ -37,7 +39,7 @@ for (var i = 0 ; i < targets.length; i++){
                     for (var j = 0 ; j < targets.length; j++){
                         targets[j].style.backgroundColor = 'red';
                     }
-                    statuses.object.style.backgroundColor = 'blue';
+                    statuses.selected.style.backgroundColor = 'blue';
                     console.log('change color');
                     statuses.state = 'none';
                 }
@@ -50,10 +52,17 @@ for (var i = 0 ; i < targets.length; i++){
     })
     targets[i].addEventListener('dblclick', function(event){
         statuses.state = 'double_dragging';
-        statuses.startpartx = event.clientX - statuses.object.offsetLeft;
-        statuses.startparty = event.clientY - statuses.object.offsetTop;
-        statuses.startposx = statuses.object.offsetLeft;
-        statuses.startposy = statuses.object.offsetTop;
+        statuses.selected = this;
+
+        for (var j = 0 ; j < targets.length; j++){
+            targets[j].style.backgroundColor = 'red';
+        }
+        statuses.selected.style.backgroundColor = 'blue';
+
+        statuses.startpartx = event.clientX - statuses.selected.offsetLeft;
+        statuses.startparty = event.clientY - statuses.selected.offsetTop;
+        statuses.startposx = statuses.selected.offsetLeft;
+        statuses.startposy = statuses.selected.offsetTop;
     })
     targets[i].addEventListener('mousedown', function(event){
         statuses.prev_time = new Date().getTime();
@@ -69,12 +78,12 @@ for (var i = 0 ; i < targets.length; i++){
     })
     targets[i].addEventListener('mouseup', function(event){
         if(statuses.state === 'single_dragging'){
-            statuses.object = null;
+            statuses.selected = null;
             statuses.state = 'none';
             console.log('stop single dragging');
         }else if(statuses.state === 'waiting'){
             statuses.prev_state = 'double_dragging';
-            statuses.object = null;
+            statuses.selected = null;
             statuses.state = 'none';
             console.log('stop waiting');
         }else if(statuses.state === 'just_clicked'){
@@ -145,7 +154,8 @@ for(var i = 0; i < targets.length; i++){
     targets[i].addEventListener('single_touch', function(){
         console.log("target single touch" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         statuses.object = this;
-        console.log(statuses.object)
+        statuses.selected = this;
+        console.log(statuses.selected);
         if(statuses.state === "none" && statuses.prev_state === 'none'){
             statuses.state = "waiting";
             setTimeout(function(){
@@ -154,7 +164,7 @@ for(var i = 0; i < targets.length; i++){
                     for (var j = 0 ; j < targets.length; j++){
                         targets[j].style.backgroundColor = 'red';
                     }
-                    statuses.object.style.backgroundColor = 'blue';
+                    statuses.selected.style.backgroundColor = 'blue';
                     console.log('change color');
                     statuses.state = 'none';
                 }
@@ -199,8 +209,10 @@ for(var i = 0; i < targets.length; i++){
         console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         
         //console.log(statuses.state, statuses.prev_state, 'touchend');
-        if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
+        if(new Date().getTime() - statuses.prev_time < 250 && statuses.selected === this){
             statuses.state = 'double_dragging';
+            statuses.object = 'this';
+
         }else{
             if(statuses.state === 'skip' && statuses.touch_number === 0){
                 //暫停後放掉，回歸閒置狀態
@@ -214,7 +226,7 @@ for(var i = 0; i < targets.length; i++){
                 //statuses.object = null;
             }else if(statuses.state === 'single_dragging'){
                 statuses.state = 'none';
-                statuses.object = null;
+                statuses.selected = null;
             }else if(statuses.state === 'double_dragging'){
                 if(statuses.prev_state === 'none' && statuses.touch_number === 0){
                     statuses.state = 'none';
@@ -271,12 +283,12 @@ document.addEventListener('touchmove', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
-    if(event.touches.length === 2 && statuses.object != null && new Date().getTime() - prev_start_time < 250){
+    if(event.touches.length === 2 && statuses.selected != null && new Date().getTime() - prev_start_time < 250){
         if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
             statuses.state = "amplify_x";
-            statuses.startposx = statuses.object.offsetLeft + 0.5 * statuses.object.offsetWidth;
-            statuses.startposy = statuses.object.offsetTop;
-            statuses.startwidth = statuses.object.offsetWidth;
+            statuses.startposx = statuses.selected.offsetLeft + 0.5 * statuses.selected.offsetWidth;
+            statuses.startposy = statuses.selected.offsetTop;
+            statuses.startwidth = statuses.selected.offsetWidth;
             statuses.startfingerwidth = Math.abs(event.touches[1].clientX - event.touches[0].clientX);
         }
     }else if(!event.target.classList.contains("target")){
