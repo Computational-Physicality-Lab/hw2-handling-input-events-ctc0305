@@ -19,7 +19,10 @@ var statuses = {
     "startpartx": 0,
     "startparty": 0,
     "prev_time": new Date().getTime() - 300,
-    "touch_number": 0
+    "prev_start_time": new Date().getTime() - 300,
+    "touch_number": 0,
+    "startwidth": 0,
+    "startfingerwidth": 0
 };
 //滑鼠的程式
 var targets = document.querySelectorAll('.target');
@@ -244,12 +247,29 @@ document.addEventListener('touchmove', function(event){
         statuses.object.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
         statuses.object.style.top = (event.touches[0].clientY - statuses.startparty) + 'px';
         statuses.prev_state = 'double_dragging';
+    }else if(statuses.state === "amplify_x"){
+        if(event.touches.length === 2){
+            statuses.object.style.width = statuses.startwidth * Math.abs(event.touches[1].clientX-event.touches[0].clientX) / statuses.startfingerwidth;
+            statuses.object.style.left = statuses.startposx - 0.5 * statuses.object.style.width;
+            statuses.prev_state = 'amplify_x';
+        }else if(event.touches.length == 1){
+            statuses.state = 'skip';
+            statuses.state = 'none';
+        }
     }
     //console.log(statuses.state);
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
-    if(!event.target.classList.contains("target")){
+    if(event.touches.length === 2 && statuses.object != null && new Date().getTime() - prev_start_time < 150){
+        if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - even.touches[0].clientY)){
+            statuses.state = "amplify_x";
+            statuses.startposx = statuses.object.offsetLeft + 0.5 * statuses.object.offsetWidth;
+            statuses.startposy = statuses.object.offsetTop;
+            statuses.startwidth = statuses.object.offsetWidth;
+            statuses.startfingerwidth = Math.abs(event.touches[1].clientX - event.touches[0].clientY);
+        }
+    }else if(!event.target.classList.contains("target")){
         statuses.touch_number += 1;
         console.log("background touchstart" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         
@@ -268,6 +288,7 @@ document.addEventListener('touchstart', function(event){
         }
             
     }
+    prev_start_time = new Date().getTime();
     event.preventDefault();
 })
 document.addEventListener('touchend', function(event){
