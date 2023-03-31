@@ -189,7 +189,7 @@ for(var i = 0; i < targets.length; i++){
         event.preventDefault();
     })
     targets[i].addEventListener('touchend', function(event){
-        statuses.touch_number -= 1;
+        statuses.touch_number = 0;
         console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         
         //console.log(statuses.state, statuses.prev_state, 'touchend');
@@ -233,11 +233,11 @@ for(var i = 0; i < targets.length; i++){
         event.preventDefault();
     })
     targets[i].addEventListener('touchcancel', function(event){
-        statuses.touch_number -= 1;
+        statuses.touch_number = 0;
     })
 }
 document.addEventListener('touchcancel', function(event){
-    statuses.touch_number -= 1;
+    statuses.touch_number = 0;
 })
 document.addEventListener('touchmove', function(event){
     if(statuses.state === "double_dragging"){
@@ -272,7 +272,7 @@ document.addEventListener('touchstart', function(event){
 })
 document.addEventListener('touchend', function(event){
     if(!event.target.classList.contains("target")){
-        statuses.touch_number -= 1;
+        statuses.touch_number = 0;
         console.log("background touchend " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         if(statuses.state === 'double_dragging' || statuses.state === 'single_dragging'){
             if(statuses.prev_state === 'none'){
