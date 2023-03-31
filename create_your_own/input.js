@@ -182,10 +182,11 @@ for(var i = 0; i < targets.length; i++){
             statuses.prev_state = 'none';
         }
     })
+    
     targets[i].addEventListener('touchstart', function(event){
         statuses.touch_number += 1;
         console.log("target touchstart " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
-        
+        statuses.prev_start_time = new Date().getTime();
         if(statuses.touch_number === 1){
             //可能是單擊拖曳事件
             if(statuses.state != "double_dragging"){
@@ -194,7 +195,10 @@ for(var i = 0; i < targets.length; i++){
                 statuses.startparty = event.touches[0].clientY - statuses.object.offsetTop;
                 statuses.startposx = statuses.object.offsetLeft;
                 statuses.startposy = statuses.object.offsetTop;
-                statuses.state = 'just_touched';
+                if(statuses.state === 'none'){
+                    statuses.state = 'just_touched';
+                }
+                
                 //console.log(statuses.state);
             }
         }else if(statuses.touch_number === 2){
@@ -225,7 +229,10 @@ for(var i = 0; i < targets.length; i++){
                 targets[j].style.backgroundColor = 'red';
             }
             statuses.selected.style.backgroundColor = 'blue';
-
+            statuses.startpartx = event.touches[0].clientX - statuses.object.offsetLeft;
+            statuses.startparty = event.touches[0].clientY - statuses.object.offsetTop;
+            statuses.startposx = statuses.object.offsetLeft;
+            statuses.startposy = statuses.object.offsetTop;
         }else{
             if(statuses.state === 'skip' && statuses.touch_number === 0){
                 //暫停後放掉，回歸閒置狀態
@@ -235,13 +242,15 @@ for(var i = 0; i < targets.length; i++){
                 //單擊後沒拖曳，以click事件處理
                 let touch_click = new Event("single_touch");
                 statuses.state = 'none';
-                this.dispatchEvent(touch_click);
-                
+                statuses.state = 'none';
+                if(new Date().getTime() - statuses.prev_start_time < 250){
+                    this.dispatchEvent(touch_click);
+                }
                 //statuses.object = null;
             }else if(statuses.state === 'single_dragging'){
                 //如果為單擊拖曳，則結束後回歸閒置狀態
                 statuses.state = 'none';
-                ///statuses.selected = null;
+                statuses.selected = null;
             }else if(statuses.state === 'double_dragging'){
                 if(statuses.prev_state === 'none' && statuses.touch_number === 0){
                     statuses.state = 'none';
