@@ -25,7 +25,8 @@ var statuses = {
     "startwidth": 0,
     "startheight": 0,
     "startfingerwidth": 0,
-    "startfingerheight": 0
+    "startfingerheight": 0,
+    "cancelled": false
 };
 //滑鼠的程式
 var targets = document.querySelectorAll('.target');
@@ -151,6 +152,9 @@ document.addEventListener('keydown', function(event){
     targets[i].object.style.minWidth = '25px';
     targets[i].object.style.minHegith = '25px'
 }*/
+
+
+
 for(var i = 0; i < targets.length; i++){
     
     targets[i].addEventListener('single_touch', function(){
@@ -201,6 +205,7 @@ for(var i = 0; i < targets.length; i++){
                 statuses.object.style.left = statuses.startposx + 'px';
                 statuses.object.style.top = statuses.startposy + 'px';
                 statuses.object = null;
+                statuses.cancelled = true;
             }
         }
         statuses.prev_state = 'none';
@@ -227,17 +232,21 @@ for(var i = 0; i < targets.length; i++){
                 statuses.state = 'none';
                 statuses.prev_state = 'none';
             }else if(statuses.state === 'just_touched'){
+                //單擊後沒拖曳，以click事件處理
                 let touch_click = new Event("single_touch");
                 statuses.state = 'none';
                 this.dispatchEvent(touch_click);
                 
                 //statuses.object = null;
             }else if(statuses.state === 'single_dragging'){
+                //如果為單擊拖曳，則結束後回歸閒置狀態
                 statuses.state = 'none';
-                statuses.selected = null;
+                ///statuses.selected = null;
             }else if(statuses.state === 'double_dragging'){
                 if(statuses.prev_state === 'none' && statuses.touch_number === 0){
                     statuses.state = 'none';
+                }else{
+                    statuses.prev_state = 'none';
                 }
             }
         }
@@ -270,7 +279,7 @@ document.addEventListener('touchmove', function(event){
     if(statuses.state === "double_dragging"){
         statuses.object.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
         statuses.object.style.top = (event.touches[0].clientY - statuses.startparty) + 'px';
-        //statuses.prev_state = 'double_dragging';
+        statuses.prev_state = 'double_dragging';
     }else if(statuses.state === "amplify_x"){
         if(event.touches.length === 2){
             if(statuses.startwidth * Math.abs(event.touches[1].clientX-event.touches[0].clientX) / statuses.startfingerwidth > 30){
@@ -282,9 +291,11 @@ document.addEventListener('touchmove', function(event){
             statuses.state = 'skip';
             statuses.state = 'none';
             statuses.object = null;
+            statuses.cancelled = true;
         }else if(event.touches.length === 3){
             statuses.object.style.width = statuses.startwidth + 'px';
             statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
+            statuses.cancelled = true;
         }
     }else if(statuses.state === "amplify_y"){
         if(event.touches.length === 2){
@@ -297,15 +308,18 @@ document.addEventListener('touchmove', function(event){
             statuses.state = 'skip';
             statuses.state = 'none';
             statuses.object = null;
+            statuses.cancelled = true;
         }else if(event.touches.length === 3){
             statuses.object.style.width = statuses.startwidth + 'px';
             statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
+            statuses.cancelled = true;
         }
     }
     //console.log(statuses.state);
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
+    statuses.cancelled = false;
     if(event.touches.length === 2 && statuses.selected != null && new Date().getTime() - prev_start_time < 250){
         if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
             statuses.state = "amplify_x";
