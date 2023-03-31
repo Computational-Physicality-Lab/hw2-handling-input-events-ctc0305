@@ -289,7 +289,7 @@ document.addEventListener('touchmove', function(event){
     }else if(statuses.state === "amplify_y"){
         if(event.touches.length === 2){
             if(statuses.startwidth * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight > 30){
-                statuses.object.style.width = statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight + 'px';
+                statuses.object.style.height = statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight + 'px';
                 statuses.object.style.top = statuses.startposy - 0.5 * statuses.object.offsetHeight + 'px';
                 statuses.prev_state = 'amplify_y';
             }
@@ -317,8 +317,8 @@ document.addEventListener('touchstart', function(event){
             statuses.state = "amplify_y";
             statuses.startposx = statuses.selected.offsetLeft ;
             statuses.startposy = statuses.selected.offsetTop+ 0.5 * statuses.selected.offsetHeight;
-            statuses.startwidth = statuses.selected.offsetWidth;
-            statuses.startfingerwidth = Math.abs(event.touches[1].clientY - event.touches[0].clientY);
+            statuses.startheight = statuses.selected.offsetHeight;
+            statuses.startfingerheight = Math.abs(event.touches[1].clientY - event.touches[0].clientY);
         }
     }else if(!event.target.classList.contains("target")){
         statuses.touch_number += 1;
