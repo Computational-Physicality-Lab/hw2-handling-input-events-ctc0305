@@ -253,9 +253,13 @@ document.addEventListener('touchmove', function(event){
             statuses.object.style.width = statuses.startwidth * Math.abs(event.touches[1].clientX-event.touches[0].clientX) / statuses.startfingerwidth + 'px';
             statuses.object.style.left = statuses.startposx - 0.5 * statuses.object.offsetWidth + 'px';
             statuses.prev_state = 'amplify_x';
-        }else if(event.touches.length == 1){
+        }else if(event.touches.length === 1){
             statuses.state = 'skip';
             statuses.state = 'none';
+            statuses.object = null;
+        }else if(event.touches.length === 3){
+            statuses.object.style.width = statuses.startwidth + 'px';
+            statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
         }
     }
     //console.log(statuses.state);
