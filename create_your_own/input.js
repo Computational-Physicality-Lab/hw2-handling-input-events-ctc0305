@@ -386,6 +386,12 @@ document.addEventListener('touchend', function(event){
                     }else{
                         statuses.state = 'none';
                         statuses.prev_state = 'none';
+                        for (var j = 0 ; j < targets.length; j++){
+                            targets[j].style.backgroundColor = 'red';
+                        }
+                        statuses.object = null;
+                        statuses.selected = null;
+
                     }
                 }
             }else if(statuses.prev_state === 'double_dragging'){
