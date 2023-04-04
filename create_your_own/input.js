@@ -276,11 +276,11 @@ for(var i = 0; i < targets.length; i++){
         }
         //console.log(statuses.state);
         event.preventDefault();
-    }, false)
+    })
     targets[i].addEventListener('touchcancel', function(event){
         console.log("touch cancel", statuses.state, statuses.prev_state);
         //statuses.touch_number = 0;
-    }, false)
+    })
 }
 document.addEventListener('touchcancel', function(event){
     statuses.touch_number = event.touches.length;
@@ -331,7 +331,7 @@ document.addEventListener('touchmove', function(event){
     }
     //console.log(statuses.state);
     event.preventDefault();
-}, true)
+})
 document.addEventListener('touchstart', function(event){
     statuses.touch_number = event.touches.length;
     if(event.touches.length === 1){
