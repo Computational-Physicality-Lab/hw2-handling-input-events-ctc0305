@@ -161,7 +161,7 @@ for(var i = 0; i < targets.length; i++){
         console.log("target single touch" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         statuses.object = this;
         var now_this = this;
-        console.log(statuses.selected);
+        //console.log(statuses.selected);
         if(statuses.state === "none" && statuses.prev_state === 'none'){
             statuses.state = "waiting";
             setTimeout(function(){
@@ -252,7 +252,7 @@ for(var i = 0; i < targets.length; i++){
             }else if(statuses.state === 'single_dragging'){
                 //如果為單擊拖曳，則結束後回歸閒置狀態
                 statuses.state = 'none';
-                statuses.selected = null;
+                //statuses.selected = null;
             }else if(statuses.state === 'double_dragging'){
                 if(statuses.prev_state === 'none' && statuses.touch_number === 0){
                     statuses.state = 'none';
