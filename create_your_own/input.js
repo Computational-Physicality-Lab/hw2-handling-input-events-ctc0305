@@ -309,9 +309,12 @@ document.addEventListener('touchmove', function(event){
         }else if(event.touches.length === 3){
             statuses.selected.style.width = statuses.startwidth + 'px';
             statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
-            statuses.object.style.height = statuses.startheight + 'px';
-            statuses.object.style.top = statuses.startposy - 0.5 * statuses.startheight + 'px';
+            statuses.selected.style.height = statuses.startheight + 'px';
+            statuses.selected.style.top = statuses.startposy - 0.5 * statuses.startheight + 'px';
             statuses.cancelled = true;
+            statuses.state = 'skip';
+            statuses.prev_state = 'none';
+            //statuses.object = null;
         }
     }else if(statuses.state === "amplify_y"){
         if(event.touches.length === 2){
@@ -328,9 +331,12 @@ document.addEventListener('touchmove', function(event){
 
             statuses.selected.style.width = statuses.startwidth + 'px';
             statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
-            statuses.object.style.height = statuses.startheight + 'px';
-            statuses.object.style.top = statuses.startposy - 0.5 * statuses.startheight + 'px';
+            statuses.selected.style.height = statuses.startheight + 'px';
+            statuses.selected.style.top = statuses.startposy - 0.5 * statuses.startheight + 'px';
             statuses.cancelled = true;
+            statuses.state = 'skip';
+            statuses.prev_state = 'none';
+            //statuses.object = null;
         }
     }
     //console.log(statuses.state);
