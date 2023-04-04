@@ -309,7 +309,7 @@ document.addEventListener('touchmove', function(event){
         }
     }else if(statuses.state === "amplify_y"){
         if(event.touches.length === 2){
-            if(statuses.startwidth * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight > 30){
+            if(statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight > 30){
                 statuses.selected.style.height = statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight + 'px';
                 statuses.selected.style.top = statuses.startposy - 0.5 * statuses.object.offsetHeight + 'px';
                 statuses.prev_state = 'amplify_y';
@@ -333,8 +333,12 @@ document.addEventListener('touchstart', function(event){
         statuses.object.style.width = statuses.startwidth + 'px';
         statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
         statuses.cancelled = true;
+        statuses.state = 'skip';
+        statuses.prev_state = 'none';
+        statuses.object = null;
     }
     if(event.touches.length === 2 && statuses.selected != null && (new Date().getTime() - prev_start_time < 250 || temp === 0)){
+        console.log("amplify touchstart" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
             statuses.state = "amplify_x";
             statuses.startposx = statuses.selected.offsetLeft + 0.5 * statuses.selected.offsetWidth;
@@ -379,8 +383,8 @@ document.addEventListener('touchend', function(event){
         if(statuses.state === 'double_dragging' || statuses.state === 'single_dragging'){
             if(statuses.prev_state === 'none'){
                 if(statuses.touch_number > 0){
-                    console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
-                    statuses.state = 'skip';
+                    /*console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
+                    statuses.state = 'skip';*/
                 }else{
                     if(statuses.cancelled === true){
                         console.log("skipped" + statuses.state + ' ' +statuses.prev_state  + ' ' + statuses.touch_number);
@@ -408,11 +412,11 @@ document.addEventListener('touchend', function(event){
             //console.log('change back color');
             }
 
-        }else if(statuses.state === 'skip'){
-            if(statuses.touch_number === 0){
-                statuses.state = 'none';
-            }
-        }else if(statuses.state === 'none' && statuses.prev_state === 'none'){
+        }//else if(statuses.state === 'skip'){
+            //if(statuses.touch_number === 0){
+                //statuses.state = 'none';
+            //}
+        else if(statuses.state === 'none' && statuses.prev_state === 'none'){
             console.log("reset background color " + statuses.state + ' ' +statuses.prev_state);
             for (var j = 0 ; j < targets.length; j++){
                 targets[j].style.backgroundColor = 'red';
@@ -422,6 +426,13 @@ document.addEventListener('touchend', function(event){
         }
         statuses.prev_time = new Date().getTime();
     }
-    
+    if((statuses.state === 'amplify_x' || statuses.state === 'amplify_y') && event.touches.length === 0){
+        statuses.state = 'none';
+        statuses.prev_state = 'none';
+    }
+    if(statuses.state === 'skip' && event.touches.length === 0){
+        statuses.state = 'none';
+        statuses.prev_state = 'none';
+    }
     event.preventDefault();
 }, true)
