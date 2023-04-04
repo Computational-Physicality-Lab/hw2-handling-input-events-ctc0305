@@ -426,6 +426,10 @@ document.addEventListener('touchend', function(event){
         }
         statuses.prev_time = new Date().getTime();
     }
+    if((statuses.state === 'amplify_x' || statuses.state === 'amplify_y') && event.touches.length === 0){
+        statuses.state = 'none';
+        statuses.prev_state = 'none';
+    }
     if(statuses.state === 'skip' && event.touches.length === 0){
         statuses.state = 'none';
         statuses.prev_state = 'none';
