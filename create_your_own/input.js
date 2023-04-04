@@ -404,6 +404,7 @@ document.addEventListener('touchend', function(event){
                     statuses.state = 'none';
                 }*/
             //console.log('change back color');
+            }
 
         }else if(statuses.state === 'skip'){
             if(statuses.touch_number === 0){
@@ -419,7 +420,6 @@ document.addEventListener('touchend', function(event){
             statuses.selected = null;
         }
     }
-}
     statuses.prev_time = new Date().getTime();
     event.preventDefault();
 })
