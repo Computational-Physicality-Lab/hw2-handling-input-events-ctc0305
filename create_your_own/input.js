@@ -170,8 +170,8 @@ for(var i = 0; i < targets.length; i++){
                     for (var j = 0 ; j < targets.length; j++){
                         targets[j].style.backgroundColor = 'red';
                     }
-                    statuses.selected.style.backgroundColor = 'blue';
                     statuses.selected = now_this;
+                    statuses.selected.style.backgroundColor = 'blue'; 
                     console.log('change color');
                     statuses.state = 'none';
                 }
