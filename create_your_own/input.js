@@ -185,7 +185,7 @@ for(var i = 0; i < targets.length; i++){
     })
     
     targets[i].addEventListener('touchstart', function(event){
-        statuses.touch_number += 1;
+        //statuses.touch_number += 1;
         console.log("target touchstart " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         statuses.prev_start_time = new Date().getTime();
         if(statuses.touch_number === 1){
@@ -218,7 +218,7 @@ for(var i = 0; i < targets.length; i++){
         event.preventDefault();
     })
     targets[i].addEventListener('touchend', function(event){
-        statuses.touch_number = 0;
+        //statuses.touch_number = 0;
         console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         
         //console.log(statuses.state, statuses.prev_state, 'touchend');
@@ -279,12 +279,14 @@ for(var i = 0; i < targets.length; i++){
     })
     targets[i].addEventListener('touchcancel', function(event){
         console.log("touch cancel", statuses.state, statuses.prev_state);
-        statuses.touch_number = 0;
+        //statuses.touch_number = 0;
     })
 }
 document.addEventListener('touchcancel', function(event){
+    statuses.touch_number = event.touches.length;
     console.log("touch cancel", statuses.state, statuses.prev_state);
-    statuses.touch_number = 0;
+    //statuses.touch_number = 0;
+
 })
 document.addEventListener('touchmove', function(event){
     
@@ -331,6 +333,7 @@ document.addEventListener('touchmove', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
+    statuses.touch_number = event.touches.length;
     if(event.touches.length === 1){
         statuses.cancelled = false;
     }
@@ -349,7 +352,7 @@ document.addEventListener('touchstart', function(event){
             statuses.startfingerheight = Math.abs(event.touches[1].clientY - event.touches[0].clientY);
         }
     }else if(!event.target.classList.contains("target")){
-        statuses.touch_number += 1;
+        //statuses.touch_number += 1;
         console.log("background touchstart" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         
         if(statuses.touch_number === 1){
@@ -371,9 +374,10 @@ document.addEventListener('touchstart', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchend', function(event){
+    statuses.touch_number = event.touches.length;
     console.log(event.target.classList.contains("target"));
     if(!event.target.classList.contains("target")){
-        statuses.touch_number = 0;
+        //statuses.touch_number = 0;
         console.log("background touchend " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         if(statuses.state === 'double_dragging' || statuses.state === 'single_dragging'){
             if(statuses.prev_state === 'none'){
