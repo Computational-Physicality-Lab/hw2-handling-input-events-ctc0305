@@ -364,7 +364,7 @@ document.addEventListener('touchstart', function(event){
         statuses.cancelled = true;
         statuses.state = 'skip';
         statuses.prev_state = 'none';
-        statuses.object = null;
+        //statuses.object = null;
     }
     if(event.touches.length === 2 && statuses.selected != null && (new Date().getTime() - prev_start_time < 250 || temp === 0)){
         console.log("amplify touchstart" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
