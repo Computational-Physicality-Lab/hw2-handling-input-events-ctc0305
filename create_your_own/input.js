@@ -370,10 +370,14 @@ document.addEventListener('touchstart', function(event){
             statuses.startposy = statuses.selected.offsetTop;
             statuses.startwidth = statuses.selected.offsetWidth;
             statuses.startfingerwidth = Math.abs(event.touches[1].clientX - event.touches[0].clientX);
+            statuses.startheight = statuses.selected.offsetHeight;
+            statuses.startfingerheight = Math.abs(event.touches[1].clientY - event.touches[0].clientY);
         }else{
             statuses.state = "amplify_y";
             statuses.startposx = statuses.selected.offsetLeft ;
             statuses.startposy = statuses.selected.offsetTop+ 0.5 * statuses.selected.offsetHeight;
+            statuses.startwidth = statuses.selected.offsetWidth;
+            statuses.startfingerwidth = Math.abs(event.touches[1].clientX - event.touches[0].clientX);
             statuses.startheight = statuses.selected.offsetHeight;
             statuses.startfingerheight = Math.abs(event.touches[1].clientY - event.touches[0].clientY);
         }
