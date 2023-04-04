@@ -386,14 +386,14 @@ document.addEventListener('touchend', function(event){
                     }
                 }
             }else if(statuses.prev_state === 'double_dragging'){
-                statuses.prev_state = 'none';
+                /*statuses.prev_state = 'none';
                 if(statuses.touch_number > 0){
                     console.log("haven't skipped " + statuses.state + ' ' +statuses.prev_state  + ' ' + statuses.touch_number);
                     statuses.state = 'skip';
                 }else{
                     console.log("skipped" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
                     statuses.state = 'none';
-                }
+                }*/
             }
             //console.log('change back color');
 
