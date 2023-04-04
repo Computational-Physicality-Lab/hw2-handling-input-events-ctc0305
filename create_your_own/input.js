@@ -338,8 +338,14 @@ document.addEventListener('touchstart', function(event){
         statuses.cancelled = false;
     }
     if(event.touches.length === 3){
-        statuses.object.style.width = statuses.startwidth + 'px';
-        statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
+        if(statuses.state === 'amplify_x'){
+            statuses.object.style.width = statuses.startwidth + 'px';
+            statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
+        }else if(statuses.state === 'amplify_y'){
+            statuses.object.style.height = statuses.startheight + 'px';
+            statuses.object.style.top = statuses.startposy - 0.5 * statuses.startheight + 'px';
+        }
+        
         statuses.cancelled = true;
         statuses.state = 'skip';
         statuses.prev_state = 'none';
