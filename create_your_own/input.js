@@ -334,11 +334,12 @@ document.addEventListener('touchmove', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchstart', function(event){
+    temp = statuses.touch_number;
     statuses.touch_number = event.touches.length;
     if(event.touches.length === 1){
         statuses.cancelled = false;
     }
-    if(event.touches.length === 2 && statuses.selected != null && new Date().getTime() - prev_start_time < 250){
+    if(event.touches.length === 2 && statuses.selected != null && (new Date().getTime() - prev_start_time < 250) || temp == 0){
         if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
             statuses.state = "amplify_x";
             statuses.startposx = statuses.selected.offsetLeft + 0.5 * statuses.selected.offsetWidth;
