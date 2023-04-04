@@ -160,7 +160,7 @@ for(var i = 0; i < targets.length; i++){
     targets[i].addEventListener('single_touch', function(){
         console.log("target single touch" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         statuses.object = this;
-        statuses.selected = this;
+        var now_this = this;
         console.log(statuses.selected);
         if(statuses.state === "none" && statuses.prev_state === 'none'){
             statuses.state = "waiting";
@@ -171,6 +171,7 @@ for(var i = 0; i < targets.length; i++){
                         targets[j].style.backgroundColor = 'red';
                     }
                     statuses.selected.style.backgroundColor = 'blue';
+                    statuses.selected = now_this;
                     console.log('change color');
                     statuses.state = 'none';
                 }
