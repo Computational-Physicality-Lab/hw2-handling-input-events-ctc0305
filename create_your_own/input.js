@@ -222,7 +222,7 @@ for(var i = 0; i < targets.length; i++){
         console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
         
         //console.log(statuses.state, statuses.prev_state, 'touchend');
-        if(new Date().getTime() - statuses.prev_time < 250 && statuses.selected === this){
+        if(new Date().getTime() - statuses.prev_time < 250 && statuses.object === this){
             statuses.state = 'double_dragging';
             statuses.object = this;
             statuses.selected = this;
