@@ -383,6 +383,9 @@ document.addEventListener('touchend', function(event){
                     if(statuses.cancelled === true){
                         console.log("skipped" + statuses.state + ' ' +statuses.prev_state  + ' ' + statuses.touch_number);
                         statuses.state = 'none';
+                    }else{
+                        statuses.state = 'none';
+                        statuses.prev_state = 'none';
                     }
                 }
             }else if(statuses.prev_state === 'double_dragging'){
@@ -394,7 +397,6 @@ document.addEventListener('touchend', function(event){
                     console.log("skipped" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
                     statuses.state = 'none';
                 }*/
-            }
             //console.log('change back color');
 
         }else if(statuses.state === 'skip'){
@@ -404,13 +406,14 @@ document.addEventListener('touchend', function(event){
         }
         else if(statuses.state === 'none' && statuses.prev_state === 'none'){
             console.log("reset background color " + statuses.state + ' ' +statuses.prev_state);
-                for (var j = 0 ; j < targets.length; j++){
-                    targets[j].style.backgroundColor = 'red';
-                }
-                statuses.object = null;
-                statuses.selected = null;
-        } 
+            for (var j = 0 ; j < targets.length; j++){
+                targets[j].style.backgroundColor = 'red';
+            }
+            statuses.object = null;
+            statuses.selected = null;
+        }
     }
+}
     statuses.prev_time = new Date().getTime();
     event.preventDefault();
 })
