@@ -215,6 +215,7 @@ for(var i = 0; i < targets.length; i++){
         }
         statuses.prev_state = 'none';
         //statuses.prev_time = new Date().getTime();
+        prev_start_time = new Date().getTime();
         event.preventDefault();
     }, false)
     targets[i].addEventListener('touchend', function(event){
@@ -262,7 +263,7 @@ for(var i = 0; i < targets.length; i++){
         }
         //console.log('touch_end')
         //console.log(statuses.state);
-        
+        statuses.prev_time = new Date().getTime();
         event.preventDefault();
     }, false)
     targets[i].addEventListener('touchmove', function(event){
@@ -368,9 +369,9 @@ document.addEventListener('touchstart', function(event){
                 statuses.object = null;
             }
         }
-            
+        prev_start_time = new Date().getTime();   
     }
-    prev_start_time = new Date().getTime();
+    
     event.preventDefault();
 }, true)
 document.addEventListener('touchend', function(event){
@@ -424,7 +425,8 @@ document.addEventListener('touchend', function(event){
             statuses.object = null;
             statuses.selected = null;
         }
+        statuses.prev_time = new Date().getTime();
     }
-    statuses.prev_time = new Date().getTime();
+    
     event.preventDefault();
 }, true)
