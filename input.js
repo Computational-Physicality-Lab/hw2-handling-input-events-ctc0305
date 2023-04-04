@@ -290,7 +290,7 @@ document.addEventListener('touchcancel', function(event){
 
 }, true)
 document.addEventListener('touchmove', function(event){
-    
+    statuses.touch_number = event.touches.length;
     if(statuses.state === "double_dragging"){
         statuses.selected.style.left = (event.touches[0].clientX - statuses.startpartx) + 'px';
         statuses.selected.style.top = (event.touches[0].clientY - statuses.startparty) + 'px';
@@ -302,11 +302,6 @@ document.addEventListener('touchmove', function(event){
                 statuses.selected.style.left = statuses.startposx - 0.5 * statuses.object.offsetWidth + 'px';
                 statuses.prev_state = 'amplify_x';
             }
-        }else if(event.touches.length === 1){
-            /*statuses.state = 'skip';
-            statuses.state = 'none';
-            statuses.object = null;
-            statuses.cancelled = true;*/
         }else if(event.touches.length === 3){
             statuses.selected.style.width = statuses.startwidth + 'px';
             statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
@@ -319,11 +314,6 @@ document.addEventListener('touchmove', function(event){
                 statuses.selected.style.top = statuses.startposy - 0.5 * statuses.object.offsetHeight + 'px';
                 statuses.prev_state = 'amplify_y';
             }
-        }else if(event.touches.length === 1){
-            /*statuses.state = 'skip';
-            statuses.state = 'none';
-            statuses.object = null;
-            statuses.cancelled = true;*/
         }else if(event.touches.length === 3){
             statuses.selected.style.width = statuses.startwidth + 'px';
             statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
@@ -422,8 +412,7 @@ document.addEventListener('touchend', function(event){
             if(statuses.touch_number === 0){
                 statuses.state = 'none';
             }
-        }
-        else if(statuses.state === 'none' && statuses.prev_state === 'none'){
+        }else if(statuses.state === 'none' && statuses.prev_state === 'none'){
             console.log("reset background color " + statuses.state + ' ' +statuses.prev_state);
             for (var j = 0 ; j < targets.length; j++){
                 targets[j].style.backgroundColor = 'red';
