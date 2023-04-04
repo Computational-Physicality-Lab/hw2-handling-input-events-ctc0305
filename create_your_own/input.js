@@ -277,10 +277,12 @@ for(var i = 0; i < targets.length; i++){
         event.preventDefault();
     })
     targets[i].addEventListener('touchcancel', function(event){
+        console.log("touch cancel", statuses.state, statuses.prev_state);
         statuses.touch_number = 0;
     })
 }
 document.addEventListener('touchcancel', function(event){
+    console.log("touch cancel", statuses.state, statuses.prev_state);
     statuses.touch_number = 0;
 })
 document.addEventListener('touchmove', function(event){
