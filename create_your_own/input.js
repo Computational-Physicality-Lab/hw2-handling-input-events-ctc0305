@@ -182,7 +182,7 @@ for(var i = 0; i < targets.length; i++){
             statuses.state = 'none';
             statuses.prev_state = 'none';
         }
-    })
+    }, false)
     
     targets[i].addEventListener('touchstart', function(event){
         //statuses.touch_number += 1;
@@ -216,7 +216,7 @@ for(var i = 0; i < targets.length; i++){
         statuses.prev_state = 'none';
         //statuses.prev_time = new Date().getTime();
         event.preventDefault();
-    })
+    }, false)
     targets[i].addEventListener('touchend', function(event){
         //statuses.touch_number = 0;
         console.log("target toucnend" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
@@ -264,7 +264,7 @@ for(var i = 0; i < targets.length; i++){
         //console.log(statuses.state);
         
         event.preventDefault();
-    })
+    }, false)
     targets[i].addEventListener('touchmove', function(event){
         
         if(statuses.state === 'just_touched' && new Date().getTime() - statuses.prev_time > 250){
@@ -276,18 +276,18 @@ for(var i = 0; i < targets.length; i++){
         }
         //console.log(statuses.state);
         event.preventDefault();
-    })
+    }, false)
     targets[i].addEventListener('touchcancel', function(event){
         console.log("touch cancel", statuses.state, statuses.prev_state);
         //statuses.touch_number = 0;
-    })
+    }, false)
 }
 document.addEventListener('touchcancel', function(event){
     statuses.touch_number = event.touches.length;
     console.log("touch cancel", statuses.state, statuses.prev_state);
     //statuses.touch_number = 0;
 
-})
+}, true)
 document.addEventListener('touchmove', function(event){
     
     if(statuses.state === "double_dragging"){
@@ -331,7 +331,7 @@ document.addEventListener('touchmove', function(event){
     }
     //console.log(statuses.state);
     event.preventDefault();
-})
+}, true)
 document.addEventListener('touchstart', function(event){
     statuses.touch_number = event.touches.length;
     if(event.touches.length === 1){
@@ -372,7 +372,7 @@ document.addEventListener('touchstart', function(event){
     }
     prev_start_time = new Date().getTime();
     event.preventDefault();
-})
+}, true)
 document.addEventListener('touchend', function(event){
     statuses.touch_number = event.touches.length;
     console.log(event.target.classList.contains("target"));
@@ -427,4 +427,4 @@ document.addEventListener('touchend', function(event){
     }
     statuses.prev_time = new Date().getTime();
     event.preventDefault();
-})
+}, true)
