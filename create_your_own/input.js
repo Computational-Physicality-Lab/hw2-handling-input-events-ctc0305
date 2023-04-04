@@ -370,6 +370,7 @@ document.addEventListener('touchstart', function(event){
     event.preventDefault();
 })
 document.addEventListener('touchend', function(event){
+    console.log(event.target.classList.contains("target"));
     if(!event.target.classList.contains("target")){
         statuses.touch_number = 0;
         console.log("background touchend " + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
