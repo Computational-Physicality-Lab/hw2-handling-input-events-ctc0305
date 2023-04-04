@@ -309,7 +309,7 @@ document.addEventListener('touchmove', function(event){
         }
     }else if(statuses.state === "amplify_y"){
         if(event.touches.length === 2){
-            if(statuses.startwidth * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight > 30){
+            if(statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight > 30){
                 statuses.selected.style.height = statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight + 'px';
                 statuses.selected.style.top = statuses.startposy - 0.5 * statuses.object.offsetHeight + 'px';
                 statuses.prev_state = 'amplify_y';
@@ -339,6 +339,8 @@ document.addEventListener('touchstart', function(event){
     }
     if(event.touches.length === 2 && statuses.selected != null && (new Date().getTime() - prev_start_time < 250 || temp === 0)){
         console.log("amplify touchstart" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
+        console.log("x: ", Math.abs(event.touches[1].clientX - event.touches[0].clientX))
+        console.log('y: ', Math.abs(event.touches[1].clientY - event.touches[0].clientY))
         if(Math.abs(event.touches[1].clientX - event.touches[0].clientX) >= Math.abs(event.touches[1].clientY - event.touches[0].clientY)){
             statuses.state = "amplify_x";
             statuses.startposx = statuses.selected.offsetLeft + 0.5 * statuses.selected.offsetWidth;
