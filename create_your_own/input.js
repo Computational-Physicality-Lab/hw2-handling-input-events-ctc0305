@@ -306,9 +306,6 @@ document.addEventListener('touchmove', function(event){
             statuses.selected.style.width = statuses.startwidth + 'px';
             statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
             statuses.cancelled = true;
-            statuses.state = 'skip';
-            statuses.prev_state = 'none';
-            statuses.object = null;
         }
     }else if(statuses.state === "amplify_y"){
         if(event.touches.length === 2){
@@ -321,9 +318,6 @@ document.addEventListener('touchmove', function(event){
             statuses.selected.style.width = statuses.startwidth + 'px';
             statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
             statuses.cancelled = true;
-            statuses.state = 'skip';
-            statuses.prev_state = 'none';
-            statuses.object = null;
         }
     }
     //console.log(statuses.state);
@@ -339,6 +333,9 @@ document.addEventListener('touchstart', function(event){
         statuses.object.style.width = statuses.startwidth + 'px';
         statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
         statuses.cancelled = true;
+        statuses.state = 'skip';
+        statuses.prev_state = 'none';
+        statuses.object = null;
     }
     if(event.touches.length === 2 && statuses.selected != null && (new Date().getTime() - prev_start_time < 250 || temp === 0)){
         console.log("amplify touchstart" + statuses.state + ' ' +statuses.prev_state + ' ' + statuses.touch_number);
