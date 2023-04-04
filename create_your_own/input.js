@@ -309,6 +309,8 @@ document.addEventListener('touchmove', function(event){
         }else if(event.touches.length === 3){
             statuses.selected.style.width = statuses.startwidth + 'px';
             statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
+            statuses.selected.style.width = statuses.startwidth + 'px';
+            statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
             statuses.cancelled = true;
         }
     }else if(statuses.state === "amplify_y"){
@@ -323,6 +325,9 @@ document.addEventListener('touchmove', function(event){
                 statuses.prev_state = 'amplify_y';
             }
         }else if(event.touches.length === 3){
+
+            statuses.selected.style.width = statuses.startwidth + 'px';
+            statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
             statuses.selected.style.width = statuses.startwidth + 'px';
             statuses.selected.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
             statuses.cancelled = true;
@@ -341,7 +346,11 @@ document.addEventListener('touchstart', function(event){
         if(statuses.state === 'amplify_x'){
             statuses.object.style.width = statuses.startwidth + 'px';
             statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
+            statuses.object.style.height = statuses.startheight + 'px';
+            statuses.object.style.top = statuses.startposy - 0.5 * statuses.startheight + 'px';
         }else if(statuses.state === 'amplify_y'){
+            statuses.object.style.width = statuses.startwidth + 'px';
+            statuses.object.style.left = statuses.startposx - 0.5 * statuses.startwidth + 'px';
             statuses.object.style.height = statuses.startheight + 'px';
             statuses.object.style.top = statuses.startposy - 0.5 * statuses.startheight + 'px';
         }
