@@ -301,6 +301,10 @@ document.addEventListener('touchmove', function(event){
                 statuses.selected.style.width = statuses.startwidth * Math.abs(event.touches[1].clientX-event.touches[0].clientX) / statuses.startfingerwidth + 'px';
                 statuses.selected.style.left = statuses.startposx - 0.5 * statuses.object.offsetWidth + 'px';
                 statuses.prev_state = 'amplify_x';
+            }else{
+                statuses.selected.style.width = '30px';
+                statuses.selected.style.left = statuses.startposx - 0.5 * statuses.object.offsetWidth + 'px';
+                statuses.prev_state = 'amplify_x';
             }
         }else if(event.touches.length === 3){
             statuses.selected.style.width = statuses.startwidth + 'px';
@@ -311,6 +315,10 @@ document.addEventListener('touchmove', function(event){
         if(event.touches.length === 2){
             if(statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight > 30){
                 statuses.selected.style.height = statuses.startheight * Math.abs(event.touches[1].clientY-event.touches[0].clientY) / statuses.startfingerheight + 'px';
+                statuses.selected.style.top = statuses.startposy - 0.5 * statuses.object.offsetHeight + 'px';
+                statuses.prev_state = 'amplify_y';
+            }else{
+                statuses.selected.style.height = '30px';
                 statuses.selected.style.top = statuses.startposy - 0.5 * statuses.object.offsetHeight + 'px';
                 statuses.prev_state = 'amplify_y';
             }
