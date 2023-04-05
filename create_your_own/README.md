@@ -5,7 +5,7 @@
 
 - https://imaginative-florentine-b8c9a8.netlify.app
 
-此為作業一的網址連結，當點擊上方Menu的Create your own按鈕，可以連結到作業二的input Handlement。其中，當點擊連結時，載入可能需要一段時間(一開始Create your own連結點擊不會連到作業二，可能要等數秒)。以下開始說明作業二完成的部分:
+此為作業一的網址連結，當點擊上方Menu的Create your own按鈕，可以連結到作業二的input Handlement。其中，當點擊連結時，載入可能需要一段時間(剛載入時網頁有可能不能正常運行，至多約等十秒網頁功能會正常)。以下開始說明作業二完成的部分:
 
 - 滑鼠點擊事件: 全部符合作業的基本要求
 
